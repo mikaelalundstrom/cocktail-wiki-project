@@ -1,13 +1,14 @@
 import React from "react";
+import "./DrinkCard.css";
 import { Link } from "react-router-dom";
 
 function DrinkCard() {
   return (
     <article>
       <figure>
-        <img src="" alt="" />
+        <img src="https://www.thecocktaildb.com/images/media/drink/5noda61589575158.jpg" alt="" />
+        <figcaption>Drink Name</figcaption>
       </figure>
-      <h2>Drink Name</h2>
       <Link to="">See more</Link>
     </article>
   );
