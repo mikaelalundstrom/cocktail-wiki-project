@@ -1,7 +1,15 @@
-import React from "react";
+interface IButton {
+  label: string;
+  onClick?: () => void;
+  className: string;
+}
 
-function Button() {
-  return <button>Button</button>;
+function Button({ label, onClick, className }: IButton) {
+  return (
+    <button onClick={onClick} className={className}>
+      {label}
+    </button>
+  );
 }
 
 export default Button;
