@@ -5,7 +5,7 @@ export function LandingPage() {
   return (
     <>
       <DrinkCard />
-      <Button />
+      <Button className={""} label={"Get a new random drink"} />
     </>
   );
 }
