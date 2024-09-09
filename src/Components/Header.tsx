@@ -9,10 +9,10 @@ function Header() {
         <h1>Cocktail-Wiki</h1>
       </Link>
       <div>
-        <Link to="/search">Sök</Link>
+        <Link to="/search">Search</Link>
         <Link to="/info">Cocktail Info</Link>
-        <Link to="/favorites">Favoriter</Link>
-        <Link to="/ingredients">Ingredienser</Link>
+        <Link to="/favorites">Favorites</Link>
+        <Link to="/ingredients">Ingredients</Link>
       </div>
     </header>
   );
