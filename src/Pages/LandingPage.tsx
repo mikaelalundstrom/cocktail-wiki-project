@@ -1,7 +1,11 @@
+import DrinkCard from "../Components/DrinkCard";
+import Button from "../Components/Button.tsx";
+
 export function LandingPage() {
   return (
     <>
-      <h1>Landing Page</h1>
+      <DrinkCard />
+      <Button />
     </>
   );
 }
