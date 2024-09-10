@@ -11,8 +11,9 @@ interface IDrink {
 }
 
 function SearchPage() {
-  const [inputValue, setinputValue] = useState<string>("");
   const [foundDrinks, setFoundDrinks] = useState<IDrink[]>([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const drinksPerPage = 10;
 
   const inputRef = useRef<null | HTMLInputElement>(null);
 
@@ -32,7 +33,23 @@ function SearchPage() {
         image: drink.strDrinkThumb,
       }))
     );
+    setCurrentPage(1);
     console.log(drinks);
+  };
+
+  const lastDrink = currentPage * drinksPerPage;
+  const firstDrink = lastDrink - drinksPerPage;
+  const currentDrinks = foundDrinks.slice(firstDrink, lastDrink);
+
+  const nextPage = () => {
+    if (Math.ceil(foundDrinks.length / drinksPerPage)) {
+      setCurrentPage((prev) => prev + 1);
+    }
+  };
+  const prevPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+    }
   };
 
   return (
@@ -42,7 +59,7 @@ function SearchPage() {
         <Button className={""} label={"Search"} />
       </form>
       <section className="drink-card-grid">
-        {foundDrinks.map((drink) => (
+        {currentDrinks.map((drink) => (
           <DrinkCard
             key={drink.id}
             name={drink.name}
@@ -50,6 +67,22 @@ function SearchPage() {
             image={drink.image}
           />
         ))}
+      </section>
+      <section>
+        <Button
+          onClick={prevPage}
+          label={"Back"}
+          disabled={currentPage === 1 ? true : false}
+        />
+        <Button
+          onClick={nextPage}
+          label={"Next"}
+          disabled={
+            currentPage === Math.ceil(foundDrinks.length / drinksPerPage)
+              ? true
+              : false
+          }
+        />
       </section>
     </>
   );
