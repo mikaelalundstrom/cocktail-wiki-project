@@ -1,15 +1,22 @@
 import React from "react";
+import "./DrinkCard.css";
 import { Link } from "react-router-dom";
 import "./Header.css";
 
-function DrinkCard() {
+interface IDrink {
+  name: string;
+  id: number;
+  image: string;
+}
+
+function DrinkCard({ name, id, image }: IDrink) {
   return (
-    <article>
+    <article className="drink-card">
       <figure>
-        <img src="" alt="" />
+        <img src={image} alt="" />
+        <figcaption>{name}</figcaption>
       </figure>
-      <h2>Drink Name</h2>
-      <Link to="">See more</Link>
+      <Link to={`/drink/${id}`}>See more</Link>
     </article>
   );
 }
