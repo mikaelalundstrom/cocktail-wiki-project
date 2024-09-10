@@ -59,7 +59,7 @@ function SearchPage() {
         <Button className={""} label={"Search"} />
       </form>
 
-      {foundDrinks.length < 4 ? (
+      {foundDrinks.length < 11 ? (
         ""
       ) : (
         <section className="searchPage-button-section top">
@@ -89,22 +89,26 @@ function SearchPage() {
           />
         ))}
       </section>
-      <section className="searchPage-button-section bottom">
-        <Button
-          onClick={prevPage}
-          label={"Back"}
-          disabled={currentPage === 1 ? true : false}
-        />
-        <Button
-          onClick={nextPage}
-          label={"Next"}
-          disabled={
-            currentPage === Math.ceil(foundDrinks.length / drinksPerPage)
-              ? true
-              : false
-          }
-        />
-      </section>
+      {foundDrinks.length < 11 ? (
+        ""
+      ) : (
+        <section className="searchPage-button-section bottom">
+          <Button
+            onClick={prevPage}
+            label={"Back"}
+            disabled={currentPage === 1 ? true : false}
+          />
+          <Button
+            onClick={nextPage}
+            label={"Next"}
+            disabled={
+              currentPage === Math.ceil(foundDrinks.length / drinksPerPage)
+                ? true
+                : false
+            }
+          />
+        </section>
+      )}
     </>
   );
 }
