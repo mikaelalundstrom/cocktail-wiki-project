@@ -54,10 +54,30 @@ function SearchPage() {
 
   return (
     <>
-      <form onSubmit={handleOnSearch}>
+      <form className="search-form" onSubmit={handleOnSearch}>
         <input type="text" placeholder="Search..." ref={inputRef} />
-        <Button className={""} label={"Search"} />
+        <Button className={"search-button"} label={"Search"} />
       </form>
+      {foundDrinks.length < 11 ? (
+        ""
+      ) : (
+        <section className="searchPage-button-section">
+          <Button
+            onClick={prevPage}
+            label={"Back"}
+            disabled={currentPage === 1 ? true : false}
+          />
+          <Button
+            onClick={nextPage}
+            label={"Next"}
+            disabled={
+              currentPage === Math.ceil(foundDrinks.length / drinksPerPage)
+                ? true
+                : false
+            }
+          />
+        </section>
+      )}
       <section className="drink-card-grid">
         {currentDrinks.map((drink) => (
           <DrinkCard
@@ -68,22 +88,26 @@ function SearchPage() {
           />
         ))}
       </section>
-      <section>
-        <Button
-          onClick={prevPage}
-          label={"Back"}
-          disabled={currentPage === 1 ? true : false}
-        />
-        <Button
-          onClick={nextPage}
-          label={"Next"}
-          disabled={
-            currentPage === Math.ceil(foundDrinks.length / drinksPerPage)
-              ? true
-              : false
-          }
-        />
-      </section>
+      {foundDrinks.length < 11 ? (
+        ""
+      ) : (
+        <section className="searchPage-button-section bottom">
+          <Button
+            onClick={prevPage}
+            label={"Back"}
+            disabled={currentPage === 1 ? true : false}
+          />
+          <Button
+            onClick={nextPage}
+            label={"Next"}
+            disabled={
+              currentPage === Math.ceil(foundDrinks.length / drinksPerPage)
+                ? true
+                : false
+            }
+          />
+        </section>
+      )}
     </>
   );
 }
