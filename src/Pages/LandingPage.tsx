@@ -1,7 +1,6 @@
 import DrinkCard from "../Components/DrinkCard";
 import Button from "../Components/Button.tsx";
 import { useEffect, useState } from "react";
-import "../Components/Button.css";
 
 interface IDrink {
   name: string;
