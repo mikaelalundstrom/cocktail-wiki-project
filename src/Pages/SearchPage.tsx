@@ -58,27 +58,6 @@ function SearchPage() {
         <input type="text" placeholder="Search..." ref={inputRef} />
         <Button className={""} label={"Search"} />
       </form>
-
-      {foundDrinks.length < 11 ? (
-        ""
-      ) : (
-        <section className="searchPage-button-section top">
-          <Button
-            onClick={prevPage}
-            label={"Back"}
-            disabled={currentPage === 1 ? true : false}
-          />
-          <Button
-            onClick={nextPage}
-            label={"Next"}
-            disabled={
-              currentPage === Math.ceil(foundDrinks.length / drinksPerPage)
-                ? true
-                : false
-            }
-          />
-        </section>
-      )}
       <section className="drink-card-grid">
         {currentDrinks.map((drink) => (
           <DrinkCard
@@ -89,26 +68,22 @@ function SearchPage() {
           />
         ))}
       </section>
-      {foundDrinks.length < 11 ? (
-        ""
-      ) : (
-        <section className="searchPage-button-section bottom">
-          <Button
-            onClick={prevPage}
-            label={"Back"}
-            disabled={currentPage === 1 ? true : false}
-          />
-          <Button
-            onClick={nextPage}
-            label={"Next"}
-            disabled={
-              currentPage === Math.ceil(foundDrinks.length / drinksPerPage)
-                ? true
-                : false
-            }
-          />
-        </section>
-      )}
+      <section>
+        <Button
+          onClick={prevPage}
+          label={"Back"}
+          disabled={currentPage === 1 ? true : false}
+        />
+        <Button
+          onClick={nextPage}
+          label={"Next"}
+          disabled={
+            currentPage === Math.ceil(foundDrinks.length / drinksPerPage)
+              ? true
+              : false
+          }
+        />
+      </section>
     </>
   );
 }
