@@ -3,10 +3,23 @@
 .drink-card-grid {
   display: grid;
   max-width: 70vw;
-  margin:auto;
+  margin: auto;
   grid-template-columns: repeat(2, 1fr);
   justify-items: center;
   align-items: center;
   font-family: "Julius Sans One", sans-serif, Arial, Helvetica;
   padding: 2rem;
+}
+
+.searchPage-button-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 3rem;
+  margin: 0;
+}
+
+.bottom {
+  padding-bottom: 2rem;
 }
