@@ -1,9 +1,7 @@
-
-
 interface IButton {
   label: string;
   onClick?: () => void;
-  className: string;
+  className?: string;
 }
 
 function Button({ label, onClick, className }: IButton) {
