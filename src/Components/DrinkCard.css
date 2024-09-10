@@ -2,38 +2,32 @@
   margin-top: 2em;
 
   figure {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: rgba(49, 71, 89, 0.118);
-    padding: 2rem;
-    border-radius: 15px;
+  display: flex;
+  max-width: 25vw;
+  min-height: 30vh;
+  flex-direction: column;
+  align-items: center;
+  background-color:rgba(49, 71, 89, 0.118);
+  padding: 2rem;
+  border-radius: 15px;
+  padding-block: 2rem;
+  box-shadow: 0px 9px 26px 6px rgba(49, 71, 89, 0.219);
 
     figcaption {
-      margin-top: 1em;
-      font-size: 2em;
-    }
-  }
-
+  margin-top: 1em;
+  font-size: 2em;
+  max-width: 20vw;
+  text-align: center;
+  text-shadow: rgba(255, 228, 196, 0.433);
+      }
+}
   img {
-    max-width: 300px;
-    border-radius: 15px;
-  }
-
-  a {
-    background-color: rgb(49, 71, 89);
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    margin-top: 1em;
-    text-decoration: none;
-  }
-
-  a:hover {
-    background-color: rgba(49, 71, 89, 0.6);
+  max-width: 300px;
+  min-width: 300px;
+  border-radius: 15px;
+  border: solid rgba(255, 228, 196, 0.551);
   }
 }
+
+
+

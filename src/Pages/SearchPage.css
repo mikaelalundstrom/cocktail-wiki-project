@@ -1,9 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Julius+Sans+One&display=swap");
 
-article {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+.drink-card-grid {
+  display: grid;
+  max-width: 70vw;
+  margin:auto;
+  grid-template-columns: repeat(2, 1fr);
+  justify-items: center;
   align-items: center;
   font-family: "Julius Sans One", sans-serif, Arial, Helvetica;
+  padding: 2rem;
 }
