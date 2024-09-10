@@ -10,7 +10,6 @@ function Header() {
       </Link>
       <div>
         <Link to="/search">Search</Link>
-        <Link to="/info">Cocktail Info</Link>
         <Link to="/favorites">Favorites</Link>
         <Link to="/ingredients">Ingredients</Link>
       </div>

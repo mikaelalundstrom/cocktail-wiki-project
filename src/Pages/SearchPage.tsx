@@ -19,7 +19,9 @@ function SearchPage() {
   const handleOnSearch = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const response = await fetch(
-      `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${inputRef.current!.value}`
+      `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${
+        inputRef.current!.value
+      }`
     );
     const data = await response.json();
     console.log(data);
@@ -41,10 +43,14 @@ function SearchPage() {
       </form>
       <section className="drink-card-grid">
         {foundDrinks.map((drink) => (
-          <DrinkCard key={drink.id} name={drink.name} id={drink.id} image={drink.image} />
+          <DrinkCard
+            key={drink.id}
+            name={drink.name}
+            id={drink.id}
+            image={drink.image}
+          />
         ))}
       </section>
-      {/*  */}
     </>
   );
 }
