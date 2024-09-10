@@ -1,6 +1,7 @@
 import React from "react";
 import "./DrinkCard.css";
 import { Link } from "react-router-dom";
+import "./Header.css";
 
 interface IDrink {
   name: string;

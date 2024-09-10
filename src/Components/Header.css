@@ -1,20 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Julius+Sans+One&display=swap');
+
 header {
-  background-color: grey;
+  background-color: rgb(49, 71, 89);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 5rem;
+  height: 5.5rem;
   a {
-    color: black;
+    color: bisque;
     text-decoration: none;
+    font-family: "Julius Sans One", sans-serif, Arial, Helvetica;
+    font-size: 1.2rem;
   }
   div {
-    margin-right: 1rem;
+    margin-right: 5rem;
     display: flex;
     gap: 1rem;
     a {
-      color: black;
+      color: bisque;
       text-decoration: none;
     }
+  }
+  h1 {
+    font-family: "Julius Sans One", sans-serif, Arial, Helvetica;
+    color: bisque;
+    padding-left: 5rem;
   }
 }
