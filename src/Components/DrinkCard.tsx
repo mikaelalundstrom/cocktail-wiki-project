@@ -2,14 +2,20 @@ import React from "react";
 import "./DrinkCard.css";
 import { Link } from "react-router-dom";
 
-function DrinkCard() {
+interface IDrink {
+  name: string;
+  id: number;
+  image: string;
+}
+
+function DrinkCard({ name, id, image }: IDrink) {
   return (
     <article className="drink-card">
       <figure>
-        <img src="https://www.thecocktaildb.com/images/media/drink/5noda61589575158.jpg" alt="" />
-        <figcaption>Drink Name</figcaption>
+        <img src={image} alt="" />
+        <figcaption>{name}</figcaption>
       </figure>
-      <Link to="">See more</Link>
+      <Link to={`/drink/${id}`}>See more</Link>
     </article>
   );
 }
