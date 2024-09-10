@@ -8,7 +8,7 @@ interface IDrink {
   image: string;
 }
 
-export function LandingPage() {
+function LandingPage() {
   const [activeDrink, setActiveDrink] = useState<IDrink>({ name: "", id: 0, image: "" });
 
   const handleOnGetRandomDrink = async () => {
@@ -33,3 +33,5 @@ export function LandingPage() {
     </>
   );
 }
+
+export default LandingPage;

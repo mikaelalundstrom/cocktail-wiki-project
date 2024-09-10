@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 
 import "./SearchPage.css";
 import DrinkCard from "../Components/DrinkCard";
@@ -11,11 +11,15 @@ interface IDrink {
 }
 
 function SearchPage() {
+  const [inputValue, setinputValue] = useState<string>("");
   const [foundDrinks, setFoundDrinks] = useState<IDrink[]>([]);
 
-  const handleOnSearch = async () => {
+  const inputRef = useRef<null | HTMLInputElement>(null);
+
+  const handleOnSearch = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     const response = await fetch(
-      `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=margarita`
+      `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${inputRef.current!.value}`
     );
     const data = await response.json();
     console.log(data);
@@ -29,18 +33,18 @@ function SearchPage() {
     console.log(drinks);
   };
 
-  useEffect(() => {
-    handleOnSearch();
-  }, []);
-
   return (
     <>
-      <form>
-        <input type="text" placeholder="Search..." />
-        <Button className={""} label={"Search"} onClick={handleOnSearch} />
+      <form onSubmit={handleOnSearch}>
+        <input type="text" placeholder="Search..." ref={inputRef} />
+        <Button className={""} label={"Search"} />
       </form>
-      <section className="drink-card-grid"></section>
-      {/* <DrinkCard name={name} id={id} image={image} /> */}
+      <section className="drink-card-grid">
+        {foundDrinks.map((drink) => (
+          <DrinkCard key={drink.id} name={drink.name} id={drink.id} image={drink.image} />
+        ))}
+      </section>
+      {/*  */}
     </>
   );
 }
