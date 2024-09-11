@@ -7,8 +7,51 @@
   margin: auto;
   grid-template-columns: repeat(2, 1fr); 
   gap: 5rem 1rem; 
+
   justify-items: center;
   align-items: start;
   font-family: "Julius Sans One", sans-serif, Arial, Helvetica;
   padding: 2rem;
+}
+
+.search-form {
+  margin: 5rem auto 2rem;
+  padding: 0 2rem;
+  max-width: 70rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+
+  input {
+    font-size: 20px;
+    padding: 15px 30px;
+    flex: 1;
+    border: none;
+    border-radius: 4px;
+    margin: 0;
+    font-family: "Julius Sans One", sans-serif, Arial, Helvetica;
+  }
+
+  .search-button {
+    margin: 0;
+    font-family: "Julius Sans One", sans-serif, Arial, Helvetica;
+    font-size: 20px;
+    padding: 15px 30px;
+    color: bisque;
+  }
+}
+
+
+.searchPage-button-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 3rem;
+  margin: 0;
+}
+
+.bottom {
+  padding-bottom: 2rem;
 }
