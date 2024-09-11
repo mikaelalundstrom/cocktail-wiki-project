@@ -8,6 +8,7 @@
   grid-template-columns: repeat(2, 1fr); 
   gap: 5rem 1rem; 
 
+
   justify-items: center;
   align-items: start;
   font-family: "Julius Sans One", sans-serif, Arial, Helvetica;
