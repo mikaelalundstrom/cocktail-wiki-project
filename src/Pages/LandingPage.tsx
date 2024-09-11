@@ -1,6 +1,8 @@
 import DrinkCard from "../Components/DrinkCard";
 import Button from "../Components/Button.tsx";
 import { useEffect, useState } from "react";
+import './LandingPage.css';
+
 
 interface IDrink {
   name: string;
@@ -42,6 +44,7 @@ function LandingPage() {
       <Button
         label={"Get a new random drink"}
         onClick={handleOnGetRandomDrink}
+        className="button"
       />
     </>
   );
