@@ -1,13 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Julius+Sans+One&display=swap");
 
-
 .drink-card-grid {
   display: grid;
-  max-width: 90vw; 
+  max-width: 90vw;
   margin: auto;
-  grid-template-columns: repeat(2, 1fr); 
-  gap: 5rem 1rem; 
-
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5rem 1rem;
 
   justify-items: center;
   align-items: start;
@@ -32,6 +30,10 @@
     border-radius: 4px;
     margin: 0;
     font-family: "Julius Sans One", sans-serif, Arial, Helvetica;
+
+    &:focus {
+      outline: 2px solid rgb(49, 71, 89);
+    }
   }
 
   .search-button {
@@ -43,6 +45,13 @@
   }
 }
 
+.search-message {
+  font-family: "Julius Sans One", sans-serif, Arial, Helvetica;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 2rem;
+}
 
 .searchPage-button-section {
   display: flex;
