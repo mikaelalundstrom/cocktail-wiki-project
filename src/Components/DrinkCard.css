@@ -1,32 +1,65 @@
+@import url('https://fonts.googleapis.com/css2?family=Julius+Sans+One&display=swap');
 .drink-card {
-  margin-top: 2em;
-
-  figure {
   display: flex;
-  max-width: 25vw;
-  min-height: 30vh;
   flex-direction: column;
   align-items: center;
-  background-color:rgba(49, 71, 89, 0.118);
-  padding: 2rem;
+  max-width: 350px; 
+  min-height: 500px; 
+  background: linear-gradient(145deg, #f0f0f0, #e0e0e0); 
   border-radius: 15px;
-  padding-block: 2rem;
-  box-shadow: 0px 9px 26px 6px rgba(49, 71, 89, 0.219);
-
-    figcaption {
-  margin-top: 1em;
-  font-size: 2em;
-  max-width: 20vw;
+  border: 1px solid rgba(255, 228, 196, 0.2); 
+  box-shadow: 0px 12px 24px rgba(49, 71, 89, 0.15), 0px 6px 12px rgba(49, 71, 89, 0.1);
+  overflow: hidden; 
+  padding: 2rem; 
   text-align: center;
-  text-shadow: rgba(255, 228, 196, 0.433);
-      }
+  transition: transform 0.8s ease, box-shadow 0.8s ease, background 0.8s ease; 
+  font-weight: bold;
 }
-  img {
-  max-width: 300px;
-  min-width: 300px;
-  border-radius: 15px;
-  border: solid rgba(255, 228, 196, 0.551);
-  }
+
+.drink-card:hover {
+  transform: scale(1.05) rotate(1deg); 
+  box-shadow: 0px 18px 40px rgba(49, 71, 89, 0.25);
+  background: linear-gradient(145deg, rgba(49, 71, 89, 0.2), rgba(49, 71, 89, 0.3));
+}
+
+.drink-card img {
+  width: 100%;
+  max-height: 350px;
+  object-fit: cover;
+  border-radius: 10px;
+  border: solid rgba(255, 228, 196, 0.3); 
+  transition: transform 0.8s ease; 
+  box-shadow: 0 4px 8px rgba(49, 71, 89, 0.1); 
+}
+
+.drink-card figcaption {
+  margin-top: 1em;
+  font-family: "Julius Sans One", sans-serif, Arial, Helvetica;
+  font-size: 1.5em;
+  color: rgb(49, 71, 89);
+  text-shadow: 0 1px 3px rgba(212, 175, 55, 0.5), 0 1px 2px rgba(255, 228, 196, 0.7); 
+  width: 100%;
+  box-sizing: border-box;
+  word-wrap: break-word;
+  line-height: 1.4; 
+  transition: transform 0.8s ease; 
+}
+
+.drink-card-grid {
+  display: grid;
+  max-width: 90vw;
+  margin: 2rem auto 0;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  justify-items: center;
+  align-items: start;
+  font-family: "Julius Sans One", sans-serif, Arial, Helvetica;
+  padding: 2rem;
+}
+
+.drink-card:hover img,
+.drink-card:hover figcaption {
+  transform: scale(1.05); 
 }
 
 
