@@ -20,7 +20,9 @@ function SearchPage() {
   const handleOnSearch = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const response = await fetch(
-      `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${inputRef.current!.value}`
+      `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${
+        inputRef.current!.value
+      }`
     );
     const data = await response.json();
     console.log(data);
@@ -56,19 +58,56 @@ function SearchPage() {
         <input type="text" placeholder="Search..." ref={inputRef} />
         <Button className={"search-button"} label={"Search"} />
       </form>
+      {foundDrinks.length < 11 ? (
+        ""
+      ) : (
+        <section className="searchPage-button-section">
+          <Button
+            onClick={prevPage}
+            label={"Back"}
+            disabled={currentPage === 1 ? true : false}
+          />
+          <Button
+            onClick={nextPage}
+            label={"Next"}
+            disabled={
+              currentPage === Math.ceil(foundDrinks.length / drinksPerPage)
+                ? true
+                : false
+            }
+          />
+        </section>
+      )}
       <section className="drink-card-grid">
         {currentDrinks.map((drink) => (
-          <DrinkCard key={drink.id} name={drink.name} id={drink.id} image={drink.image} />
+          <DrinkCard
+            key={drink.id}
+            name={drink.name}
+            id={drink.id}
+            image={drink.image}
+          />
         ))}
       </section>
-      <section>
-        <Button onClick={prevPage} label={"Back"} disabled={currentPage === 1 ? true : false} />
-        <Button
-          onClick={nextPage}
-          label={"Next"}
-          disabled={currentPage === Math.ceil(foundDrinks.length / drinksPerPage) ? true : false}
-        />
-      </section>
+      {foundDrinks.length < 11 ? (
+        ""
+      ) : (
+        <section className="searchPage-button-section bottom">
+          <Button
+            onClick={prevPage}
+            label={"Back"}
+            disabled={currentPage === 1 ? true : false}
+          />
+          <Button
+            onClick={nextPage}
+            label={"Next"}
+            disabled={
+              currentPage === Math.ceil(foundDrinks.length / drinksPerPage)
+                ? true
+                : false
+            }
+          />
+        </section>
+      )}
     </>
   );
 }
