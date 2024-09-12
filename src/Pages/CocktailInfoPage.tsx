@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import Heart from "../assets/heart.svg";
+
+import "./CocktailInfoPage.css";
 
 interface IDrinkInfo {
   name: string;
@@ -68,15 +71,20 @@ function CocktailInfoPage() {
   return (
     <section className="drink-info">
       <section>
-        <figure>
+        <figure className="image">
           <img src={activeDrink.image} alt={activeDrink.name} />
         </figure>
-        <h1>{activeDrink.name}</h1>
+        <div className="header-icon-container">
+          <h1>{activeDrink.name}</h1>
+          <figure className="icon">
+            <img src={Heart} alt="" />
+          </figure>
+        </div>
         <h3>{activeDrink.category}</h3>
       </section>
-      <section>
+      <section className="ingredients">
         <h2>Ingredients</h2>
-        <div>
+        <div className="ingredients-content">
           <div>
             {activeDrink.measures.map((measure: string) => (
               <p>{measure}</p>
@@ -89,11 +97,13 @@ function CocktailInfoPage() {
           </div>
         </div>
       </section>
-      <section>
+      <section className="instructions">
         <h2>Instructions</h2>
-        <p>{activeDrink.instructions}</p>
-        <p>Best served in a {activeDrink.glass}</p>
-        {activeDrink.tags ? <p>{activeDrink.tags[0]}</p> : ""}
+        <p className="instructions-text">{activeDrink.instructions}</p>
+        <p className="glass-info">Best served in a {activeDrink.glass}</p>
+        <div className="tags">
+          {activeDrink.tags ? activeDrink.tags.map((tag: string) => <p>{tag}</p>) : ""}
+        </div>
       </section>
     </section>
   );
