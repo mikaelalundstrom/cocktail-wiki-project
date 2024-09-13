@@ -72,7 +72,7 @@ function CocktailInfoPage() {
 
   return (
     <section className="drink-info">
-      <section>
+      <section className="image-wrapper">
         <figure className="image">
           <img src={activeDrink.image} alt={activeDrink.name} />
         </figure>
