@@ -13,7 +13,7 @@ interface IDrinkInfo {
   ingredients: string[];
   measures: string[];
   glass: string;
-  instructions: string;
+  instructions: string[];
 }
 
 function CocktailInfoPage() {
@@ -27,7 +27,7 @@ function CocktailInfoPage() {
     ingredients: [],
     measures: [],
     glass: "",
-    instructions: "",
+    instructions: [],
   });
 
   useEffect(() => {
@@ -37,10 +37,12 @@ function CocktailInfoPage() {
       );
       const data = await response.json();
       console.log(data);
+
       let tags;
       if (data.drinks[0].strTags) {
         tags = data.drinks[0].strTags.split(",");
       }
+      const instructions = data.drinks[0].strInstructions.split(". ");
       let measuresArr: string[] = [];
       let ingredientsArr: string[] = [];
 
@@ -62,7 +64,7 @@ function CocktailInfoPage() {
         ingredients: ingredientsArr,
         measures: measuresArr,
         glass: data.drinks[0].strGlass,
-        instructions: data.drinks[0].strInstructions,
+        instructions: instructions,
       });
     };
     getDrinkById();
@@ -70,7 +72,7 @@ function CocktailInfoPage() {
 
   return (
     <section className="drink-info">
-      <section>
+      <section className="image-wrapper">
         <figure className="image">
           <img src={activeDrink.image} alt={activeDrink.name} />
         </figure>
@@ -99,7 +101,11 @@ function CocktailInfoPage() {
       </section>
       <section className="instructions">
         <h2>Instructions</h2>
-        <p className="instructions-text">{activeDrink.instructions}</p>
+        <div className="instructions-text">
+          {activeDrink.instructions.map((instruction: string) => (
+            <p>{instruction}</p>
+          ))}
+        </div>
         <p className="glass-info">Best served in a {activeDrink.glass}</p>
         <div className="tags">
           {activeDrink.tags ? activeDrink.tags.map((tag: string) => <p>{tag}</p>) : ""}
