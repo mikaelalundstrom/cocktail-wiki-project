@@ -11,7 +11,6 @@ function Header() {
       <div>
         <Link to="/search">Search</Link>
         <Link to="/favorites">Favorites</Link>
-        <Link to="/ingredients">Ingredients</Link>
       </div>
     </header>
   );

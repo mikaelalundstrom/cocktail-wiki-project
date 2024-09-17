@@ -1,0 +1,22 @@
+@import url("https://fonts.googleapis.com/css2?family=Julius+Sans+One&display=swap");
+
+.favorites-grid {
+  display: grid;
+  max-width: 90vw;
+  margin: 0 auto;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 3rem 1rem;
+
+  justify-items: center;
+  align-items: start;
+  font-family: "Julius Sans One", sans-serif, Arial, Helvetica;
+  padding: 0 2rem 2rem 2rem;
+}
+
+.favorites-title {
+  font-family: "Julius Sans One", sans-serif, Arial, Helvetica;
+  text-align: center;
+  padding-top: 4rem;
+  color: rgb(49, 71, 89);
+  font-size: 3.5rem;
+}
