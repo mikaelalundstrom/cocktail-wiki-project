@@ -33,7 +33,12 @@ function LandingPage() {
 
   return (
     <section className="landing-page">
-      <DrinkCard name={activeDrink!.name} id={activeDrink!.id} image={activeDrink!.image} />
+      <DrinkCard
+        name={activeDrink!.name}
+        id={activeDrink!.id}
+        image={activeDrink!.image}
+        style="drink-card"
+      />
       <Button
         label={"Get a new random drink"}
         onClick={handleOnGetRandomDrink}

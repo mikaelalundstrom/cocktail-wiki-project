@@ -101,7 +101,13 @@ function SearchPage() {
       )}
       <section className="drink-card-grid">
         {currentDrinks.map((drink) => (
-          <DrinkCard key={drink.id} name={drink.name} id={drink.id} image={drink.image} />
+          <DrinkCard
+            key={drink.id}
+            name={drink.name}
+            id={drink.id}
+            image={drink.image}
+            style="drink-card"
+          />
         ))}
       </section>
       {foundDrinks.length < 11 ? (

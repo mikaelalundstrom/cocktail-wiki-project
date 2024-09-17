@@ -11,7 +11,13 @@ function FavoritesPage() {
       <h1 className="favorites-title">Favorite cocktails</h1>
       <section className="favorites-grid">
         {favoriteDrinks?.map((drink) => (
-          <DrinkCard key={drink.id} name={drink.name} id={drink.id} image={drink.image} />
+          <DrinkCard
+            key={drink.id}
+            name={drink.name}
+            id={drink.id}
+            image={drink.image}
+            style="drink-card"
+          />
         ))}
       </section>
     </>

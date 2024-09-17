@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import "./IngredientPage.css";
+import DrinkCard from "../Components/DrinkCard";
 
 interface IIngredient {
   name: string;
@@ -11,6 +12,13 @@ interface IIngredient {
   alcohol: string;
   strength?: number;
   image: string;
+}
+
+interface IDrink {
+  name: string;
+  id: number;
+  image: string;
+  style?: string;
 }
 
 function IngredientPage() {
@@ -24,6 +32,7 @@ function IngredientPage() {
     strength: 0,
     image: "",
   });
+  const [listOfDrinks, setListOfDrinks] = useState<IDrink[]>([]);
 
   useEffect(() => {
     const getIngredientByName = async () => {
@@ -50,14 +59,32 @@ function IngredientPage() {
 
       console.log(activeIngredient);
     };
+
+    const getDrinksByIngredient = async () => {
+      const response = await fetch(
+        `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${name}`
+      );
+      const data = await response.json();
+      console.log("drinks", data);
+
+      if (data.drinks !== null) {
+        setListOfDrinks(
+          data.drinks.map((drink: any) => ({
+            name: drink.strDrink,
+            id: drink.idDrink,
+            image: drink.strDrinkThumb,
+          }))
+        );
+      } else {
+        setListOfDrinks([]);
+      }
+    };
+    getDrinksByIngredient();
     getIngredientByName();
   }, []);
 
   return (
     <>
-      {/* {activeIngredient.name} {activeIngredient.id} {activeIngredient.description}{" "}
-      {activeIngredient.type} {activeIngredient.alcohol} {activeIngredient.strength}{" "}
-      {activeIngredient.image} */}
       <section className="ingredient-info">
         <section className="image-wrapper">
           <figure className="image">
@@ -76,8 +103,17 @@ function IngredientPage() {
             <p>{activeIngredient.description}</p>
           </section>
         ) : null}
-
-        <section className="extra-information"></section>
+        <section className="drink-card-list">
+          {listOfDrinks.map((drink) => (
+            <DrinkCard
+              key={drink.id}
+              name={drink.name}
+              id={drink.id}
+              image={drink.image}
+              style="small-list-cards"
+            />
+          ))}
+        </section>
       </section>
     </>
   );

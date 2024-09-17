@@ -1,13 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Julius+Sans+One&display=swap");
 
-.drink-link {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: 350px;
-  min-height: 500px;
-  text-decoration: none;
-}
 .drink-card {
   display: flex;
   flex-direction: column;
@@ -23,6 +15,7 @@
   text-align: center;
   transition: transform 0.8s ease, box-shadow 0.8s ease, background 0.8s ease;
   font-weight: bold;
+  text-decoration: none;
 }
 
 .drink-card:hover {
@@ -57,4 +50,33 @@
 .drink-card:hover img,
 .drink-card:hover figcaption {
   transform: scale(1.05);
+}
+
+.small-list-cards {
+  width: 35rem;
+  box-shadow: 0 4px 8px rgba(49, 71, 89, 0.1);
+  border: 1px solid rgba(255, 228, 196, 0.2);
+  background: linear-gradient(145deg, #f0f0f0, #e0e0e0);
+  transition: transform 0.8s ease, box-shadow 0.8s ease, background 0.8s ease;
+  text-decoration: none;
+  font-weight: bold;
+  border-radius: 10px;
+  color: rgb(49, 71, 89);
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 18px 40px rgba(49, 71, 89, 0.25);
+    background: linear-gradient(145deg, rgba(49, 71, 89, 0.2), rgba(49, 71, 89, 0.3));
+  }
+  figure {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  img {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 10px 0 0 10px;
+  }
 }
