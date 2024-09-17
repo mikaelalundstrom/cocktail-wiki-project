@@ -4,6 +4,7 @@ import LandingPage from "./Pages/LandingPage";
 import SearchPage from "./Pages/SearchPage";
 import CocktailInfoPage from "./Pages/CocktailInfoPage";
 import FavoritesPage from "./Pages/FavoritesPage";
+import IngredientPage from "./Pages/IngredientPage";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -12,6 +13,7 @@ export const router = createBrowserRouter(
       <Route path="/search" element={<SearchPage />} />
       <Route path="/drink/:id" element={<CocktailInfoPage />} />
       <Route path="/favorites" element={<FavoritesPage />} />
+      <Route path="/ingredient/:name" element={<IngredientPage />} />
     </Route>
   )
 );

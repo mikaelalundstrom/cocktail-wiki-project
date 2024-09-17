@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Heart from "../assets/heart.svg";
 import HeartFilled from "../assets/heart-fill.svg";
 import "./CocktailInfoPage.css";
@@ -133,7 +133,9 @@ function CocktailInfoPage() {
           </div>
           <div>
             {activeDrink.ingredients.map((ingredient: string, i) => (
-              <p key={i}>{ingredient}</p>
+              <Link key={i} to={`/ingredient/${ingredient}`}>
+                <p>{ingredient}</p>
+              </Link>
             ))}
           </div>
         </div>
