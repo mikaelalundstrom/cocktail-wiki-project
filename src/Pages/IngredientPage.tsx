@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-
 import "./IngredientPage.css";
 import DrinkCard from "../Components/DrinkCard";
+import ArrowUp from "../assets/arrow-up.svg";
 
 interface IIngredient {
   name: string;
@@ -34,6 +34,7 @@ function IngredientPage() {
   });
   const [listOfDrinks, setListOfDrinks] = useState<IDrink[]>([]);
   const [drinkBatch, setDrinkBatch] = useState<number>(1);
+  const [showScrollTopBtn, setShowScrollTopBtn] = useState<boolean>(false);
   const drinksPerBatch = 10;
 
   const lastDrink = drinkBatch * drinksPerBatch;
@@ -48,14 +49,23 @@ function IngredientPage() {
         setDrinkBatch((prev) => prev + 1);
       }
     }
+
+    if (document.documentElement.scrollTop > 20) {
+      setShowScrollTopBtn(true);
+    } else {
+      setShowScrollTopBtn(false);
+    }
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+    });
   };
 
   useEffect(() => {
-    if (listOfDrinks.length / drinksPerBatch > drinkBatch) {
-      window.addEventListener("scroll", handleScroll);
-    } else {
-      window.removeEventListener("scroll", handleScroll);
-    }
+    window.addEventListener("scroll", handleScroll);
+
     return () => window.removeEventListener("scroll", handleScroll);
   });
 
@@ -122,7 +132,11 @@ function IngredientPage() {
             <p>{activeIngredient.description}</p>
           </section>
         ) : null}
-        <h2 className="list-title">{activeIngredient.name} is used to make:</h2>
+
+        {currentDrinks.length !== 0 ? (
+          <h2 className="list-title">{activeIngredient.name} is used to make:</h2>
+        ) : null}
+
         <section className="drink-card-list">
           {currentDrinks.map((drink) => (
             <DrinkCard
@@ -136,6 +150,11 @@ function IngredientPage() {
         </section>
         {listOfDrinks.length / drinksPerBatch > drinkBatch ? (
           <p>scroll to load more drinks</p>
+        ) : null}
+        {showScrollTopBtn ? (
+          <button className="scroll-to-top" onClick={scrollToTop}>
+            <img src={ArrowUp} alt="To top" />
+          </button>
         ) : null}
       </section>
     </>
