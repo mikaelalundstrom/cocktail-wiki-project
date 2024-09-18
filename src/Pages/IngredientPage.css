@@ -35,7 +35,7 @@
     color: bisque;
     width: 35rem;
     margin-top: 2rem;
-    margin-bottom: 2rem;
+
     border-radius: 15px;
     padding: 1rem;
     h2 {
@@ -58,6 +58,12 @@
         color: white;
       }
     }
+  }
+
+  .list-title {
+    padding-top: 3rem;
+    width: 35rem;
+    text-align: left;
   }
   .drink-card-list {
     display: flex;

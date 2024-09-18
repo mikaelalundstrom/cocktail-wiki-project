@@ -33,6 +33,31 @@ function IngredientPage() {
     image: "",
   });
   const [listOfDrinks, setListOfDrinks] = useState<IDrink[]>([]);
+  const [drinkBatch, setDrinkBatch] = useState<number>(1);
+  const drinksPerBatch = 10;
+
+  const lastDrink = drinkBatch * drinksPerBatch;
+  const currentDrinks = listOfDrinks.slice(0, lastDrink);
+
+  const handleScroll = () => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop ===
+      document.documentElement.offsetHeight
+    ) {
+      if (listOfDrinks.length / drinksPerBatch > drinkBatch) {
+        setDrinkBatch((prev) => prev + 1);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (listOfDrinks.length / drinksPerBatch > drinkBatch) {
+      window.addEventListener("scroll", handleScroll);
+    } else {
+      window.removeEventListener("scroll", handleScroll);
+    }
+    return () => window.removeEventListener("scroll", handleScroll);
+  });
 
   useEffect(() => {
     const getIngredientByName = async () => {
@@ -40,12 +65,9 @@ function IngredientPage() {
         `https://www.thecocktaildb.com/api/json/v1/1/search.php?i=${name}`
       );
       const data = await response.json();
-      console.log("data", data);
-
       const imgResponse = await fetch(
         `https://www.thecocktaildb.com/images/ingredients/${name}.png`
       );
-      console.log(imgResponse.url);
 
       setActiveIngredient({
         name: data.ingredients[0].strIngredient,
@@ -56,8 +78,6 @@ function IngredientPage() {
         strength: data.ingredients[0].strABV,
         image: imgResponse.url,
       });
-
-      console.log(activeIngredient);
     };
 
     const getDrinksByIngredient = async () => {
@@ -65,14 +85,13 @@ function IngredientPage() {
         `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${name}`
       );
       const data = await response.json();
-      console.log("drinks", data);
 
       if (data.drinks !== null) {
         setListOfDrinks(
           data.drinks.map((drink: any) => ({
             name: drink.strDrink,
             id: drink.idDrink,
-            image: drink.strDrinkThumb,
+            image: drink.strDrinkThumb + "/preview",
           }))
         );
       } else {
@@ -103,8 +122,9 @@ function IngredientPage() {
             <p>{activeIngredient.description}</p>
           </section>
         ) : null}
+        <h2 className="list-title">{activeIngredient.name} is used to make:</h2>
         <section className="drink-card-list">
-          {listOfDrinks.map((drink) => (
+          {currentDrinks.map((drink) => (
             <DrinkCard
               key={drink.id}
               name={drink.name}
@@ -114,6 +134,9 @@ function IngredientPage() {
             />
           ))}
         </section>
+        {listOfDrinks.length / drinksPerBatch > drinkBatch ? (
+          <p>scroll to load more drinks</p>
+        ) : null}
       </section>
     </>
   );
