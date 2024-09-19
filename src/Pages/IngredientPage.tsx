@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import "./IngredientPage.css";
 import DrinkCard from "../Components/DrinkCard";
+import ChevronDown from "../assets/chevron-down.svg";
 
 interface IIngredient {
   name: string;
@@ -33,6 +34,22 @@ function IngredientPage() {
     image: "",
   });
   const [listOfDrinks, setListOfDrinks] = useState<IDrink[]>([]);
+  const [descExpand, setDescExpand] = useState<boolean>(false);
+  const [descHeight, setDescHeight] = useState<null | number>(null);
+  const descRef = useRef<null | HTMLElement>(null);
+
+  const toggleDesc = () => {
+    setDescExpand((prev) => {
+      console.log(descRef.current!.scrollHeight);
+
+      if (prev) {
+        setDescHeight(480);
+      } else {
+        setDescHeight(descRef.current!.scrollHeight + 64);
+      }
+      return !prev;
+    });
+  };
 
   useEffect(() => {
     const getIngredientByName = async () => {
@@ -45,7 +62,6 @@ function IngredientPage() {
       const imgResponse = await fetch(
         `https://www.thecocktaildb.com/images/ingredients/${name}.png`
       );
-      console.log(imgResponse.url);
 
       setActiveIngredient({
         name: data.ingredients[0].strIngredient,
@@ -56,8 +72,6 @@ function IngredientPage() {
         strength: data.ingredients[0].strABV,
         image: imgResponse.url,
       });
-
-      console.log(activeIngredient);
     };
 
     const getDrinksByIngredient = async () => {
@@ -83,6 +97,14 @@ function IngredientPage() {
     getIngredientByName();
   }, []);
 
+  useEffect(() => {
+    if (descRef.current) {
+      if (descRef.current.clientHeight > 480) {
+        setDescHeight(480);
+      }
+    }
+  }, [descRef.current]);
+
   return (
     <>
       <section className="ingredient-info">
@@ -98,9 +120,26 @@ function IngredientPage() {
           {activeIngredient.strength ? <p>Strength: {activeIngredient.strength}%</p> : ""}
         </section>
         {activeIngredient.description ? (
-          <section className="description">
+          <section
+            className={descExpand ? "description" : "description closed"}
+            ref={descRef}
+            style={{ height: `${descHeight}px` }}
+          >
             <h2>Description</h2>
             <p>{activeIngredient.description}</p>
+
+            <div
+              className={
+                descRef.current && descRef.current.clientHeight < 480
+                  ? "expand-btn d-none"
+                  : !descExpand
+                  ? "expand-btn"
+                  : "expand-btn close"
+              }
+              onClick={toggleDesc}
+            >
+              <img src={ChevronDown} alt="Expand" />
+            </div>
           </section>
         ) : null}
         <section className="drink-card-list">
