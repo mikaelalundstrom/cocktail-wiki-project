@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import "./IngredientPage.css";
 import DrinkCard from "../Components/DrinkCard";
+import ArrowUp from "../assets/arrow-up.svg";
 import ChevronDown from "../assets/chevron-down.svg";
 
 interface IIngredient {
@@ -24,6 +25,7 @@ interface IDrink {
 
 function IngredientPage() {
   const { name } = useParams();
+  const navigate = useNavigate(); //
   const [activeIngredient, setActiveIngredient] = useState<IIngredient>({
     name: "",
     id: 0,
@@ -34,9 +36,38 @@ function IngredientPage() {
     image: "",
   });
   const [listOfDrinks, setListOfDrinks] = useState<IDrink[]>([]);
+  const [drinkBatch, setDrinkBatch] = useState<number>(1);
+  const [showScrollTopBtn, setShowScrollTopBtn] = useState<boolean>(false);
+  const drinksPerBatch = 10;
+
+  const lastDrink = drinkBatch * drinksPerBatch;
+  const currentDrinks = listOfDrinks.slice(0, lastDrink);
   const [descExpand, setDescExpand] = useState<boolean>(false);
   const [descHeight, setDescHeight] = useState<null | number>(null);
   const descRef = useRef<null | HTMLElement>(null);
+
+  const handleScroll = () => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop ===
+      document.documentElement.offsetHeight
+    ) {
+      if (listOfDrinks.length / drinksPerBatch > drinkBatch) {
+        setDrinkBatch((prev) => prev + 1);
+      }
+    }
+
+    if (document.documentElement.scrollTop > 20) {
+      setShowScrollTopBtn(true);
+    } else {
+      setShowScrollTopBtn(false);
+    }
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+    });
+  };
 
   const toggleDesc = () => {
     setDescExpand((prev) => {
@@ -52,26 +83,42 @@ function IngredientPage() {
   };
 
   useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  });
+
+  useEffect(() => {
     const getIngredientByName = async () => {
-      const response = await fetch(
-        `https://www.thecocktaildb.com/api/json/v1/1/search.php?i=${name}`
-      );
-      const data = await response.json();
-      console.log("data", data);
+      try {
+        const response = await fetch(
+          `https://www.thecocktaildb.com/api/json/v1/1/search.php?i=${name}`
+        );
+        const data = await response.json();
 
-      const imgResponse = await fetch(
-        `https://www.thecocktaildb.com/images/ingredients/${name}.png`
-      );
+        // check if it finds the ingredient
+        if (!data.ingredients || data.ingredients.length === 0) {
+          navigate("/not-found"); // if not to not found page
+          return;
+        }
 
-      setActiveIngredient({
-        name: data.ingredients[0].strIngredient,
-        id: data.ingredients[0].idIngredient,
-        description: data.ingredients[0].strDescription,
-        type: data.ingredients[0].strType,
-        alcohol: data.ingredients[0].strAlcohol,
-        strength: data.ingredients[0].strABV,
-        image: imgResponse.url,
-      });
+        const imgResponse = await fetch(
+          `https://www.thecocktaildb.com/images/ingredients/${name}.png`
+        );
+
+        setActiveIngredient({
+          name: data.ingredients[0].strIngredient,
+          id: data.ingredients[0].idIngredient,
+          description: data.ingredients[0].strDescription,
+          type: data.ingredients[0].strType,
+          alcohol: data.ingredients[0].strAlcohol,
+          strength: data.ingredients[0].strABV,
+          image: imgResponse.url,
+        });
+      } catch (error) {
+        console.error("Error fetching ingredient data:", error);
+        navigate("/not-found"); // if there is an error fro mthe api then it redirects to not found
+      }
     };
 
     const getDrinksByIngredient = async () => {
@@ -79,23 +126,23 @@ function IngredientPage() {
         `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${name}`
       );
       const data = await response.json();
-      console.log("drinks", data);
 
       if (data.drinks !== null) {
         setListOfDrinks(
           data.drinks.map((drink: any) => ({
             name: drink.strDrink,
             id: drink.idDrink,
-            image: drink.strDrinkThumb,
+            image: drink.strDrinkThumb + "/preview",
           }))
         );
       } else {
         setListOfDrinks([]);
       }
     };
+
     getDrinksByIngredient();
     getIngredientByName();
-  }, []);
+  }, [name, navigate]);
 
   useEffect(() => {
     if (descRef.current) {
@@ -142,8 +189,13 @@ function IngredientPage() {
             </div>
           </section>
         ) : null}
+
+        {currentDrinks.length !== 0 ? (
+          <h2 className="list-title">{activeIngredient.name} is used to make:</h2>
+        ) : null}
+
         <section className="drink-card-list">
-          {listOfDrinks.map((drink) => (
+          {currentDrinks.map((drink) => (
             <DrinkCard
               key={drink.id}
               name={drink.name}
@@ -153,6 +205,14 @@ function IngredientPage() {
             />
           ))}
         </section>
+        {listOfDrinks.length / drinksPerBatch > drinkBatch ? (
+          <p>scroll to load more drinks</p>
+        ) : null}
+        {showScrollTopBtn ? (
+          <button className="scroll-to-top" onClick={scrollToTop}>
+            <img src={ArrowUp} alt="To top" />
+          </button>
+        ) : null}
       </section>
     </>
   );
