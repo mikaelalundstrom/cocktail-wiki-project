@@ -1,2 +1,42 @@
 @import url("https://fonts.googleapis.com/css2?family=Julius+Sans+One&display=swap");
 
+.not-found {
+  min-width: 100vw;
+  max-width: 100vw;
+  min-height: 80vh;
+  font-family: "Julius Sans One", sans-serif, Arial, Helvetica;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  font-size: 1.4rem;
+  overflow: hidden;
+}
+
+.not-found > h1, .not-found > p, .not-found-link {
+  display: flex;
+  justify-content: center;
+  padding-block: 2rem;
+  max-width: 100vw;
+ 
+}
+
+.not-found-title {
+  color: rgb(49, 71, 89);
+}
+
+.not-found-link {
+  text-decoration: none;
+  font-weight: bold;
+  color: rgb(49, 71, 89);
+}
+
+.notfound-link:visited {
+  text-decoration: none;
+}
+
+.not-found-link:hover {
+  scale: 1.1;
+  transition-duration: 0.7s;
+}
+

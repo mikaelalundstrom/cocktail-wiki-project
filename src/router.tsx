@@ -9,7 +9,7 @@ import NotFound from "./Pages/NotFoundPage";
 
 export const router = createBrowserRouter(
 	createRoutesFromElements(
-		<Route path="/" element={<App />}>
+		<Route path="/" element={<App />} errorElement={<NotFound />}>
 			<Route index element={<LandingPage />} />
 			<Route path="/search" element={<SearchPage />} />
 			<Route path="/drink/:id" element={<CocktailInfoPage />} />
