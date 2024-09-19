@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom"; // 
 import "./IngredientPage.css";
 import DrinkCard from "../Components/DrinkCard";
 import ArrowUp from "../assets/arrow-up.svg";
@@ -23,6 +23,7 @@ interface IDrink {
 
 function IngredientPage() {
   const { name } = useParams();
+  const navigate = useNavigate(); // 
   const [activeIngredient, setActiveIngredient] = useState<IIngredient>({
     name: "",
     id: 0,
@@ -71,23 +72,35 @@ function IngredientPage() {
 
   useEffect(() => {
     const getIngredientByName = async () => {
-      const response = await fetch(
-        `https://www.thecocktaildb.com/api/json/v1/1/search.php?i=${name}`
-      );
-      const data = await response.json();
-      const imgResponse = await fetch(
-        `https://www.thecocktaildb.com/images/ingredients/${name}.png`
-      );
+      try {
+        const response = await fetch(
+          `https://www.thecocktaildb.com/api/json/v1/1/search.php?i=${name}`
+        );
+        const data = await response.json();
+        
+        // check if it finds the ingredient
+        if (!data.ingredients || data.ingredients.length === 0) {
+          navigate("/not-found"); // if not to not found page
+          return;
+        }
 
-      setActiveIngredient({
-        name: data.ingredients[0].strIngredient,
-        id: data.ingredients[0].idIngredient,
-        description: data.ingredients[0].strDescription,
-        type: data.ingredients[0].strType,
-        alcohol: data.ingredients[0].strAlcohol,
-        strength: data.ingredients[0].strABV,
-        image: imgResponse.url,
-      });
+        const imgResponse = await fetch(
+          `https://www.thecocktaildb.com/images/ingredients/${name}.png`
+        );
+
+        setActiveIngredient({
+          name: data.ingredients[0].strIngredient,
+          id: data.ingredients[0].idIngredient,
+          description: data.ingredients[0].strDescription,
+          type: data.ingredients[0].strType,
+          alcohol: data.ingredients[0].strAlcohol,
+          strength: data.ingredients[0].strABV,
+          image: imgResponse.url,
+        });
+      } catch (error) {
+        console.error("Error fetching ingredient data:", error);
+        navigate("/not-found"); // if there is an error fro mthe api then it redirects to not found
+      }
     };
 
     const getDrinksByIngredient = async () => {
@@ -108,9 +121,10 @@ function IngredientPage() {
         setListOfDrinks([]);
       }
     };
+
     getDrinksByIngredient();
     getIngredientByName();
-  }, []);
+  }, [name, navigate]); // 
 
   return (
     <>
@@ -124,7 +138,11 @@ function IngredientPage() {
 
           <h3>{activeIngredient.type}</h3>
           <p>Alcoholic: {activeIngredient.alcohol}</p>
-          {activeIngredient.strength ? <p>Strength: {activeIngredient.strength}%</p> : ""}
+          {activeIngredient.strength ? (
+            <p>Strength: {activeIngredient.strength}%</p>
+          ) : (
+            ""
+          )}
         </section>
         {activeIngredient.description ? (
           <section className="description">
