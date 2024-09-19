@@ -6,7 +6,10 @@
   box-sizing: border-box;
 }
 
-html,
+html {
+  scroll-behavior: smooth;
+}
+
 body,
 #root {
   height: 100%;
