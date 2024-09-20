@@ -5,7 +5,7 @@ interface ISkeleton {
   type: string;
 }
 
-function SkeletonElement({ outer, type }: ISkeleton) {
+function SkeletonElement({ type }: ISkeleton) {
   return <div className={type}></div>;
 }
 
