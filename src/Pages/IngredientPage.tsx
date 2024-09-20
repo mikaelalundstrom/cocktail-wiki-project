@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom"; // 
+import { useEffect, useRef, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+
 import "./IngredientPage.css";
 import DrinkCard from "../Components/DrinkCard";
 import ArrowUp from "../assets/arrow-up.svg";
+import ChevronDown from "../assets/chevron-down.svg";
 
 interface IIngredient {
   name: string;
@@ -23,7 +25,7 @@ interface IDrink {
 
 function IngredientPage() {
   const { name } = useParams();
-  const navigate = useNavigate(); // 
+  const navigate = useNavigate(); //
   const [activeIngredient, setActiveIngredient] = useState<IIngredient>({
     name: "",
     id: 0,
@@ -40,6 +42,9 @@ function IngredientPage() {
 
   const lastDrink = drinkBatch * drinksPerBatch;
   const currentDrinks = listOfDrinks.slice(0, lastDrink);
+  const [descExpand, setDescExpand] = useState<boolean>(false);
+  const [descHeight, setDescHeight] = useState<null | number>(null);
+  const descRef = useRef<null | HTMLElement>(null);
 
   const handleScroll = () => {
     if (
@@ -64,6 +69,19 @@ function IngredientPage() {
     });
   };
 
+  const toggleDesc = () => {
+    setDescExpand((prev) => {
+      console.log(descRef.current!.scrollHeight);
+
+      if (prev) {
+        setDescHeight(480);
+      } else {
+        setDescHeight(descRef.current!.scrollHeight + 64);
+      }
+      return !prev;
+    });
+  };
+
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
 
@@ -77,7 +95,7 @@ function IngredientPage() {
           `https://www.thecocktaildb.com/api/json/v1/1/search.php?i=${name}`
         );
         const data = await response.json();
-        
+
         // check if it finds the ingredient
         if (!data.ingredients || data.ingredients.length === 0) {
           navigate("/not-found"); // if not to not found page
@@ -124,7 +142,15 @@ function IngredientPage() {
 
     getDrinksByIngredient();
     getIngredientByName();
-  }, [name, navigate]); // 
+  }, [name, navigate]);
+
+  useEffect(() => {
+    if (descRef.current) {
+      if (descRef.current.clientHeight > 480) {
+        setDescHeight(480);
+      }
+    }
+  }, [descRef.current]);
 
   return (
     <>
@@ -138,16 +164,29 @@ function IngredientPage() {
 
           <h3>{activeIngredient.type}</h3>
           <p>Alcoholic: {activeIngredient.alcohol}</p>
-          {activeIngredient.strength ? (
-            <p>Strength: {activeIngredient.strength}%</p>
-          ) : (
-            ""
-          )}
+          {activeIngredient.strength ? <p>Strength: {activeIngredient.strength}%</p> : ""}
         </section>
         {activeIngredient.description ? (
-          <section className="description">
+          <section
+            className={descExpand ? "description" : "description closed"}
+            ref={descRef}
+            style={{ height: `${descHeight}px` }}
+          >
             <h2>Description</h2>
             <p>{activeIngredient.description}</p>
+
+            <div
+              className={
+                descRef.current && descRef.current.clientHeight < 480
+                  ? "expand-btn d-none"
+                  : !descExpand
+                  ? "expand-btn"
+                  : "expand-btn close"
+              }
+              onClick={toggleDesc}
+            >
+              <img src={ChevronDown} alt="Expand" />
+            </div>
           </section>
         ) : null}
 
