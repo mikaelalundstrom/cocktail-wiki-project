@@ -27,9 +27,7 @@ function LandingPage() {
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      handleOnGetRandomDrink();
-    }, 3000);
+    handleOnGetRandomDrink();
   }, []);
 
   return (

@@ -6,9 +6,7 @@ interface ISkeleton {
 }
 
 function SkeletonElement({ outer, type }: ISkeleton) {
-  const classes = ` ${type}`;
-
-  return <div className={classes}></div>;
+  return <div className={type}></div>;
 }
 
 export default SkeletonElement;
