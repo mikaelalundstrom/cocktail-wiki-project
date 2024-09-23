@@ -20,7 +20,8 @@ function LandingPage() {
     let url: string;
 
     if (isNonAlcoholic) {
-      url = "https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=Non_Alcoholic";
+      url =
+        "https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=Non_Alcoholic";
       const response = await fetch(url);
       const data = await response.json();
 
@@ -46,10 +47,12 @@ function LandingPage() {
 
   useEffect(() => {
     handleOnGetRandomDrink();
-  }, [isNonAlcoholic]); 
+  }, [isNonAlcoholic]);
 
   const handleCheckboxChange = () => {
-    setIsNonAlcoholic(!isNonAlcoholic);
+    if (setIsNonAlcoholic) {
+      setIsNonAlcoholic(!isNonAlcoholic);
+    }
   };
 
   return (
