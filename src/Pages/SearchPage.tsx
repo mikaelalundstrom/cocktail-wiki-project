@@ -3,6 +3,7 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 import "./SearchPage.css";
 import DrinkCard from "../Components/DrinkCard";
 import Button from "../Components/Button";
+import SkeletonCard from "../Skeletons/SkeletonCard";
 import Select from "../Components/Select";
 
 interface IDrink {
@@ -19,16 +20,19 @@ function SearchPage() {
   const [currentPage, setCurrentPage] = useState(1);
   // search message
   const [searchMessage, setSearchMessage] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   // form
   const [filtersCategory, setFiltersCategory] = useState<string[]>([]);
   const [filtersGlass, setFiltersGlass] = useState<string[]>([]);
   const [filtersIngredient, setFiltersIngredient] = useState<string[]>([]);
   const [filtersAlcohol, setFiltersAlcohol] = useState<string[]>([]);
+
   const inputRef = useRef<null | HTMLInputElement>(null);
 
   const handleOnSearch = async (event: FormEvent<HTMLFormElement>) => {
     try {
       event.preventDefault();
+      setIsLoading(true);
       // variables for the form values
       const form = event.target as HTMLFormElement;
       const category = form.category.value as HTMLSelectElement;
@@ -95,6 +99,8 @@ function SearchPage() {
       setCurrentPage(1);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -214,15 +220,17 @@ function SearchPage() {
         </section>
       )}
       <section className="drink-card-grid">
-        {currentDrinks.map((drink) => (
-          <DrinkCard
-            key={drink.id}
-            name={drink.name}
-            id={drink.id}
-            image={drink.image}
-            style="drink-card"
-          />
-        ))}
+        {isLoading
+          ? [1, 2, 3, 4, 5].map((n) => <SkeletonCard key={n} />)
+          : currentDrinks.map((drink) => (
+              <DrinkCard
+                key={drink.id}
+                name={drink.name}
+                id={drink.id}
+                image={drink.image}
+                style="drink-card"
+              />
+            ))}
       </section>
       {foundDrinks.length < 11 ? (
         ""
