@@ -1,7 +1,10 @@
 import { Outlet } from "react-router-dom";
 import Header from "./Components/Header";
 import { FavoritesContext } from "./context";
-import { useState } from "react";
+import { useState } from "react"
+import { CheckboxProvider } from "./CheckBoxContext"; // Import the provider
+
+
 
 interface IDrink {
   name: string;
@@ -16,7 +19,11 @@ function App() {
     <>
       <Header />
       <FavoritesContext.Provider value={{ favoriteDrinks, setFavoriteDrinks }}>
-        <Outlet />
+        <CheckboxProvider>
+
+          <Outlet />
+        </CheckboxProvider>
+
       </FavoritesContext.Provider>
     </>
   );
