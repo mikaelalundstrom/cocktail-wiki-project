@@ -18,33 +18,64 @@
   padding: 0 2rem;
   max-width: 70rem;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
   gap: 2rem;
+  font-family: "Julius Sans One", sans-serif, Arial, Helvetica;
 
-  input {
-    font-size: 20px;
-    padding: 15px 30px;
-    flex: 1;
-    border: none;
-    border-radius: 4px;
-    margin: 0;
-    font-family: "Julius Sans One", sans-serif, Arial, Helvetica;
+  h2 {
+    color: rgb(49, 71, 89);
+  }
 
-    &:focus {
-      outline: 2px solid rgb(49, 71, 89);
+  div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    width: 100%;
+
+    input[type="text"] {
+      font-size: 20px;
+      padding: 15px 30px;
+      flex: 1;
+      border: none;
+      border-radius: 4px;
+      margin: 0;
+      font-family: "Julius Sans One", sans-serif, Arial, Helvetica;
+
+      &:focus {
+        outline: 2px solid rgb(49, 71, 89);
+      }
+    }
+
+    .search-button {
+      margin: 0;
+      font-family: "Julius Sans One", sans-serif, Arial, Helvetica;
+      font-size: 20px;
+      padding: 15px 30px;
+      color: bisque;
     }
   }
 
-  .search-button {
-    margin: 0;
-    font-family: "Julius Sans One", sans-serif, Arial, Helvetica;
-    font-size: 20px;
-    padding: 15px 30px;
-    color: bisque;
+  .filters {
+    .checkbox {
+      font-family: "Julius Sans One", sans-serif, Arial, Helvetica;
+      font-size: 20px;
+      padding: 15px 30px;
+      outline: none;
+      text-transform: lowercase;
+      background-color: white;
+      border: none;
+      border-radius: 4px;
+      color: rgb(49, 71, 89);
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+
+  .filter-search-buttons {
+    justify-content: end;
   }
 }
-
 .search-message {
   font-family: "Julius Sans One", sans-serif, Arial, Helvetica;
   display: flex;
