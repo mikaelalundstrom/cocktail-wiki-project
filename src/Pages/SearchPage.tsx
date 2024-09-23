@@ -3,6 +3,7 @@ import { FormEvent, useRef, useState } from "react";
 import "./SearchPage.css";
 import DrinkCard from "../Components/DrinkCard";
 import Button from "../Components/Button";
+import SkeletonCard from "../Skeletons/SkeletonCard";
 
 interface IDrink {
   name: string;
@@ -14,6 +15,7 @@ function SearchPage() {
   const [foundDrinks, setFoundDrinks] = useState<IDrink[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchMessage, setSearchMessage] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const drinksPerPage = 10;
 
   const inputRef = useRef<null | HTMLInputElement>(null);
@@ -21,6 +23,7 @@ function SearchPage() {
   const handleOnSearch = async (event: FormEvent<HTMLFormElement>) => {
     try {
       event.preventDefault();
+      setIsLoading(true);
 
       if (inputRef.current!.value.trim().length > 0) {
         const response = await fetch(
@@ -48,6 +51,8 @@ function SearchPage() {
       setCurrentPage(1);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -91,34 +96,52 @@ function SearchPage() {
         ""
       ) : (
         <section className="searchPage-button-section">
-          <Button onClick={prevPage} label={"Back"} disabled={currentPage === 1 ? true : false} />
+          <Button
+            onClick={prevPage}
+            label={"Back"}
+            disabled={currentPage === 1 ? true : false}
+          />
           <Button
             onClick={nextPage}
             label={"Next"}
-            disabled={currentPage === Math.ceil(foundDrinks.length / drinksPerPage) ? true : false}
+            disabled={
+              currentPage === Math.ceil(foundDrinks.length / drinksPerPage)
+                ? true
+                : false
+            }
           />
         </section>
       )}
       <section className="drink-card-grid">
-        {currentDrinks.map((drink) => (
-          <DrinkCard
-            key={drink.id}
-            name={drink.name}
-            id={drink.id}
-            image={drink.image}
-            style="drink-card"
-          />
-        ))}
+        {isLoading
+          ? [1, 2, 3, 4, 5].map((n) => <SkeletonCard key={n} />)
+          : currentDrinks.map((drink) => (
+              <DrinkCard
+                key={drink.id}
+                name={drink.name}
+                id={drink.id}
+                image={drink.image}
+                style="drink-card"
+              />
+            ))}
       </section>
       {foundDrinks.length < 11 ? (
         ""
       ) : (
         <section className="searchPage-button-section bottom">
-          <Button onClick={prevPage} label={"Back"} disabled={currentPage === 1 ? true : false} />
+          <Button
+            onClick={prevPage}
+            label={"Back"}
+            disabled={currentPage === 1 ? true : false}
+          />
           <Button
             onClick={nextPage}
             label={"Next"}
-            disabled={currentPage === Math.ceil(foundDrinks.length / drinksPerPage) ? true : false}
+            disabled={
+              currentPage === Math.ceil(foundDrinks.length / drinksPerPage)
+                ? true
+                : false
+            }
           />
         </section>
       )}
