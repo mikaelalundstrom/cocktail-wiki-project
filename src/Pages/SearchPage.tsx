@@ -1,9 +1,10 @@
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 
 import "./SearchPage.css";
 import DrinkCard from "../Components/DrinkCard";
 import Button from "../Components/Button";
 import SkeletonCard from "../Skeletons/SkeletonCard";
+import Select from "../Components/Select";
 
 interface IDrink {
   name: string;
@@ -12,11 +13,19 @@ interface IDrink {
 }
 
 function SearchPage() {
+  // STATES & ref
+  // pagination
+  const drinksPerPage = 10;
   const [foundDrinks, setFoundDrinks] = useState<IDrink[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
+  // search message
   const [searchMessage, setSearchMessage] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const drinksPerPage = 10;
+  // form
+  const [filtersCategory, setFiltersCategory] = useState<string[]>([]);
+  const [filtersGlass, setFiltersGlass] = useState<string[]>([]);
+  const [filtersIngredient, setFiltersIngredient] = useState<string[]>([]);
+  const [filtersAlcohol, setFiltersAlcohol] = useState<string[]>([]);
 
   const inputRef = useRef<null | HTMLInputElement>(null);
 
@@ -24,35 +33,102 @@ function SearchPage() {
     try {
       event.preventDefault();
       setIsLoading(true);
+      // variables for the form values
+      const form = event.target as HTMLFormElement;
+      const category = form.category.value as HTMLSelectElement;
+      const glass = form.glass.value as HTMLSelectElement;
+      const ingredient = form.ingredient.value as HTMLSelectElement;
+      const alcohol = form.alcohol.value as HTMLSelectElement;
+      // current drinks (used to keep track of what drinks to eventually display to user)
+      let currentDrinks = [];
+      // search term to keep track of if user entered a search term (to know how to handle the first filterSearch)
+      let searchTerm;
 
       if (inputRef.current!.value.trim().length > 0) {
         const response = await fetch(
           `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${inputRef.current!.value.trim()}`
         );
         const data = await response.json();
-        console.log(data);
-        messageForDrinksFound(data.drinks);
+        searchTerm = true;
 
         if (data.drinks !== null) {
-          setFoundDrinks(
-            data.drinks.map((drink: any) => ({
-              name: drink.strDrink,
-              id: drink.idDrink,
-              image: drink.strDrinkThumb,
-            }))
-          );
-        } else {
-          setFoundDrinks([]);
+          currentDrinks = data.drinks;
         }
       } else {
-        setFoundDrinks([]);
-        setSearchMessage("Search not valid");
+        searchTerm = false;
       }
+      // check all filter options if active, and make sure searchTerm is set to true after
+      if (category) {
+        currentDrinks = await filterSearch("c", category, currentDrinks, searchTerm);
+        searchTerm = true;
+      }
+      if (glass) {
+        currentDrinks = await filterSearch("g", glass, currentDrinks, searchTerm);
+        searchTerm = true;
+      }
+      if (ingredient) {
+        currentDrinks = await filterSearch("i", ingredient, currentDrinks, searchTerm);
+        searchTerm = true;
+      }
+      if (alcohol) {
+        currentDrinks = await filterSearch("a", alcohol, currentDrinks, searchTerm);
+        searchTerm = true;
+      }
+      // if no valid search and no filters selected
+      if (
+        inputRef.current!.value.trim().length === 0 &&
+        !category &&
+        !glass &&
+        !ingredient &&
+        !alcohol
+      ) {
+        setFoundDrinks([]);
+        setSearchMessage("Please enter a valid search term or apply a filter");
+      } else {
+        // set drink message and set found drinks based on current drinks
+        messageForDrinksFound(currentDrinks!);
+        setFoundDrinks(
+          currentDrinks!.map((drink: any) => ({
+            name: drink.strDrink,
+            id: drink.idDrink,
+            image: drink.strDrinkThumb,
+          }))
+        );
+      }
+
       setCurrentPage(1);
     } catch (error) {
       console.log(error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const filterSearch = async (
+    filterKey: string,
+    filterTerm: HTMLSelectElement,
+    currentDrinks: any,
+    searchTerm: boolean
+  ) => {
+    try {
+      const response = await fetch(
+        `https://www.thecocktaildb.com/api/json/v1/1/filter.php?${filterKey}=${filterTerm}`
+      );
+      const data = await response.json();
+      // if searchTerm is true, compare response data to currentDrinks and filter out the matches into currentDrinks
+      if (searchTerm) {
+        currentDrinks = currentDrinks.filter((currentDrink: any) =>
+          data.drinks.some((drink: any) => drink.idDrink === currentDrink.idDrink)
+        );
+        return currentDrinks;
+        // if searchTerm is false, set currentDrinks to response data directly
+        // (cannot just check if currentDrinks is an empty array, since a valid search still could result in no results)
+      } else {
+        currentDrinks = data.drinks;
+        return currentDrinks;
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -85,30 +161,61 @@ function SearchPage() {
     }
   };
 
+  useEffect(() => {
+    const getFilters = async (filterKey: string, filterType: string) => {
+      try {
+        const response = await fetch(
+          `https://www.thecocktaildb.com/api/json/v1/1/list.php?${filterKey}=list`
+        );
+        const data = await response.json();
+        const filterOptions = data.drinks.map(
+          (drink: { [key: string]: string }) => drink[filterType]
+        );
+
+        return filterOptions;
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    // get arrays of all the filter options
+    const setupFilters = async () => {
+      setFiltersCategory(await getFilters("c", "strCategory"));
+      setFiltersGlass(await getFilters("g", "strGlass"));
+      setFiltersIngredient(await getFilters("i", "strIngredient1"));
+      setFiltersAlcohol(await getFilters("a", "strAlcoholic"));
+    };
+    setupFilters();
+    // do on mount only
+  }, []);
+
   return (
     <>
-      <form className="search-form" onSubmit={handleOnSearch}>
-        <input type="text" placeholder="Search..." ref={inputRef} required />
-        <Button className={"search-button"} label={"Search"} />
-      </form>
+      <section className="search">
+        <form className="search-form" onSubmit={handleOnSearch}>
+          <h2>Search</h2>
+          <div>
+            <input type="text" placeholder="drink name..." ref={inputRef} />
+            <Button className={"search-button"} label={"Search"} />
+          </div>
+          <h2>Filters</h2>
+          <div className="filters">
+            <Select id="category" label="Select Category:" options={filtersCategory}></Select>
+            <Select id="glass" label="Select Glass:" options={filtersGlass}></Select>
+            <Select id="ingredient" label="Select Ingredient:" options={filtersIngredient}></Select>
+            <Select id="alcohol" label="Alcohol status:" options={filtersAlcohol}></Select>
+          </div>
+        </form>
+      </section>
       <p className="search-message">{searchMessage}</p>
       {foundDrinks.length < 11 ? (
         ""
       ) : (
         <section className="searchPage-button-section">
-          <Button
-            onClick={prevPage}
-            label={"Back"}
-            disabled={currentPage === 1 ? true : false}
-          />
+          <Button onClick={prevPage} label={"Back"} disabled={currentPage === 1 ? true : false} />
           <Button
             onClick={nextPage}
             label={"Next"}
-            disabled={
-              currentPage === Math.ceil(foundDrinks.length / drinksPerPage)
-                ? true
-                : false
-            }
+            disabled={currentPage === Math.ceil(foundDrinks.length / drinksPerPage) ? true : false}
           />
         </section>
       )}
@@ -129,19 +236,11 @@ function SearchPage() {
         ""
       ) : (
         <section className="searchPage-button-section bottom">
-          <Button
-            onClick={prevPage}
-            label={"Back"}
-            disabled={currentPage === 1 ? true : false}
-          />
+          <Button onClick={prevPage} label={"Back"} disabled={currentPage === 1 ? true : false} />
           <Button
             onClick={nextPage}
             label={"Next"}
-            disabled={
-              currentPage === Math.ceil(foundDrinks.length / drinksPerPage)
-                ? true
-                : false
-            }
+            disabled={currentPage === Math.ceil(foundDrinks.length / drinksPerPage) ? true : false}
           />
         </section>
       )}
