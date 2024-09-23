@@ -1,9 +1,5 @@
 import "./Skeleton.css";
-
-interface ISkeleton {
-  outer?: string;
-  type: string;
-}
+import { ISkeleton } from "../interfaces";
 
 function SkeletonElement({ type }: ISkeleton) {
   return <div className={type}></div>;

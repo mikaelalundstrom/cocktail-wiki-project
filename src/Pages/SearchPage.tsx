@@ -1,16 +1,11 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 
-import "./SearchPage.css";
+import "./css/SearchPage.css";
 import DrinkCard from "../Components/DrinkCard";
 import Button from "../Components/Button";
 import SkeletonCard from "../Skeletons/SkeletonCard";
 import Select from "../Components/Select";
-
-interface IDrink {
-  name: string;
-  id: number;
-  image: string;
-}
+import { IDrink } from "../interfaces";
 
 function SearchPage() {
   // STATES & ref
@@ -20,15 +15,16 @@ function SearchPage() {
   const [currentPage, setCurrentPage] = useState(1);
   // search message
   const [searchMessage, setSearchMessage] = useState<string>("");
+  // state for placeholders while loading
   const [isLoading, setIsLoading] = useState<boolean>(false);
   // form
   const [filtersCategory, setFiltersCategory] = useState<string[]>([]);
   const [filtersGlass, setFiltersGlass] = useState<string[]>([]);
   const [filtersIngredient, setFiltersIngredient] = useState<string[]>([]);
   const [filtersAlcohol, setFiltersAlcohol] = useState<string[]>([]);
-
   const inputRef = useRef<null | HTMLInputElement>(null);
 
+  // fetch drinks by search from API
   const handleOnSearch = async (event: FormEvent<HTMLFormElement>) => {
     try {
       event.preventDefault();
@@ -43,7 +39,7 @@ function SearchPage() {
       let currentDrinks = [];
       // search term to keep track of if user entered a search term (to know how to handle the first filterSearch)
       let searchTerm;
-
+      // check if entered input is valid
       if (inputRef.current!.value.trim().length > 0) {
         const response = await fetch(
           `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${inputRef.current!.value.trim()}`
@@ -104,6 +100,7 @@ function SearchPage() {
     }
   };
 
+  // fetch drinks based on filter and compare to currentDrinks
   const filterSearch = async (
     filterKey: string,
     filterTerm: HTMLSelectElement,
@@ -132,6 +129,7 @@ function SearchPage() {
     }
   };
 
+  // what message to display to user after search
   const messageForDrinksFound = (drinks: [] | null) => {
     if (drinks === null) {
       setSearchMessage("No drinks found");
@@ -146,6 +144,7 @@ function SearchPage() {
     }
   };
 
+  // pagination
   const lastDrink = currentPage * drinksPerPage;
   const firstDrink = lastDrink - drinksPerPage;
   const currentDrinks = foundDrinks.slice(firstDrink, lastDrink);
@@ -161,6 +160,7 @@ function SearchPage() {
     }
   };
 
+  // fetch filter options from API
   useEffect(() => {
     const getFilters = async (filterKey: string, filterType: string) => {
       try {
@@ -185,7 +185,6 @@ function SearchPage() {
       setFiltersAlcohol(await getFilters("a", "strAlcoholic"));
     };
     setupFilters();
-    // do on mount only
   }, []);
 
   return (
@@ -220,17 +219,20 @@ function SearchPage() {
         </section>
       )}
       <section className="drink-card-grid">
-        {isLoading
-          ? [1, 2, 3, 4, 5].map((n) => <SkeletonCard key={n} />)
-          : currentDrinks.map((drink) => (
-              <DrinkCard
-                key={drink.id}
-                name={drink.name}
-                id={drink.id}
-                image={drink.image}
-                style="drink-card"
-              />
-            ))}
+        {
+          // when isLoading, show skeleton placeholders
+          isLoading
+            ? [1, 2, 3, 4, 5].map((n) => <SkeletonCard key={n} />)
+            : currentDrinks.map((drink) => (
+                <DrinkCard
+                  key={drink.id}
+                  name={drink.name}
+                  id={drink.id}
+                  image={drink.image}
+                  style="drink-card"
+                />
+              ))
+        }
       </section>
       {foundDrinks.length < 11 ? (
         ""

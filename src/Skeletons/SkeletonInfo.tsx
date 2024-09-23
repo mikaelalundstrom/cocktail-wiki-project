@@ -1,6 +1,7 @@
 import Shimmer from "./Shimmer";
 import SkeletonElement from "./SkeletonElement";
 
+// skeleton/placeholder for info page
 function SkeletonInfo() {
   return (
     <>

@@ -2,25 +2,16 @@ import { useContext, useEffect, useState } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
 import Heart from "../assets/heart.svg";
 import HeartFilled from "../assets/heart-fill.svg";
-import "./CocktailInfoPage.css";
-import { FavoritesContext } from "../context";
+import "./css/CocktailInfoPage.css";
+import { FavoritesContext } from "../Context/FavoritesContext";
 import SkeletonInfo from "../Skeletons/SkeletonInfo";
-
-interface IDrinkInfo {
-  name: string;
-  id: number;
-  image: string;
-  category: string;
-  tags?: string[];
-  ingredients: string[];
-  measures: string[];
-  glass: string;
-  instructions: string[];
-}
+import { IDrinkInfo } from "../interfaces";
 
 function CocktailInfoPage() {
   let { id } = useParams();
   const navigate = useNavigate();
+
+  // STATES
   const [activeDrink, setActiveDrink] = useState<IDrinkInfo>({
     name: "",
     id: 0,
@@ -32,10 +23,10 @@ function CocktailInfoPage() {
     glass: "",
     instructions: [],
   });
-
-  const [isActive, setIsActive] = useState<boolean>(false);
+  const [isFavorite, setIsFavorite] = useState<boolean>(false);
   const { favoriteDrinks, setFavoriteDrinks } = useContext(FavoritesContext);
 
+  // Function to check if drink is in favorites based on FavoritesContext
   const checkIfInFavorites = () => {
     if (favoriteDrinks) {
       const isDrinkActive = favoriteDrinks.find(
@@ -43,9 +34,9 @@ function CocktailInfoPage() {
       );
 
       if (isDrinkActive) {
-        setIsActive(true);
+        setIsFavorite(true);
       } else {
-        setIsActive(false);
+        setIsFavorite(false);
       }
     }
   };
@@ -54,10 +45,11 @@ function CocktailInfoPage() {
     checkIfInFavorites();
   }, []);
 
+  // Adds or removes drink to favorite
   useEffect(() => {
     if (favoriteDrinks && setFavoriteDrinks && activeDrink.id !== 0) {
       const favorites = [...favoriteDrinks];
-      if (isActive) {
+      if (isFavorite) {
         favorites.push({
           name: activeDrink.name,
           id: activeDrink.id,
@@ -65,14 +57,12 @@ function CocktailInfoPage() {
         });
         setFavoriteDrinks(favorites);
       } else {
-        const newFavorites = favorites.filter(
-          (favorite) => favorite.id !== activeDrink.id
-        );
+        const newFavorites = favorites.filter((favorite) => favorite.id !== activeDrink.id);
         setFavoriteDrinks(newFavorites);
       }
     }
-  }, [isActive]);
-
+  }, [isFavorite]);
+  // fetch drink from API through id
   useEffect(() => {
     const getDrinkById = async () => {
       try {
@@ -87,6 +77,7 @@ function CocktailInfoPage() {
           return;
         }
 
+        // format data
         let tags;
         if (data.drinks[0].strTags) {
           tags = data.drinks[0].strTags.split(",");
@@ -103,7 +94,7 @@ function CocktailInfoPage() {
           const ingredientItem: string = data.drinks[0]["strIngredient" + i];
           ingredientsArr.push(ingredientItem);
         }
-
+        // set fetched data to activeDrink
         setActiveDrink({
           name: data.drinks[0].strDrink,
           id: data.drinks[0].idDrink,
@@ -121,7 +112,6 @@ function CocktailInfoPage() {
         navigate("/not-found");
       }
     };
-
     getDrinkById();
   }, [id, navigate]);
 
@@ -135,11 +125,8 @@ function CocktailInfoPage() {
             </figure>
             <div className="header-icon-container">
               <h1>{activeDrink.name}</h1>
-              <figure
-                className="icon"
-                onClick={() => setIsActive((prev) => !prev)}
-              >
-                <img src={isActive ? HeartFilled : Heart} alt="" />
+              <figure className="icon" onClick={() => setIsFavorite((prev) => !prev)}>
+                <img src={isFavorite ? HeartFilled : Heart} alt="" />
               </figure>
             </div>
             <h3>{activeDrink.category}</h3>
@@ -177,6 +164,7 @@ function CocktailInfoPage() {
           </section>
         </div>
       ) : (
+        // show skeleton placeholder before drink is loaded
         <SkeletonInfo />
       )}
     </section>

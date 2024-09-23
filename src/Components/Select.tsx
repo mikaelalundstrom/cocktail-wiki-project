@@ -1,10 +1,5 @@
-import "./Select.css";
-
-interface ISelect {
-  label: string;
-  options: string[];
-  id: string;
-}
+import "./css/Select.css";
+import { ISelect } from "../interfaces";
 
 function Select({ label, options, id }: ISelect) {
   return (

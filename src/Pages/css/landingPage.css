@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Julius+Sans+One&display=swap");
+
 .landing-page {
   display: flex;
   justify-content: center;
@@ -5,6 +7,16 @@
   background-color: #f0f0f0;
   font-family: "Arial", sans-serif;
   flex-direction: column;
+
+  .filter {
+    font-family: "Julius Sans One", sans-serif, Arial, Helvetica;
+
+    color: rgb(49, 71, 89);
+
+    input {
+      margin-right: 1rem;
+    }
+  }
 }
 
 .drink-card {
@@ -16,4 +28,3 @@ button {
   padding: 1rem 2rem;
   margin-bottom: 2em;
 }
-

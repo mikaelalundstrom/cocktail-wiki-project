@@ -20,3 +20,10 @@
   color: rgb(49, 71, 89);
   font-size: 3.5rem;
 }
+
+.no-favorite-text {
+  font-family: "Julius Sans One", sans-serif, Arial, Helvetica;
+  text-align: center;
+  padding-top: 2rem;
+  color: rgb(49, 71, 89);
+}

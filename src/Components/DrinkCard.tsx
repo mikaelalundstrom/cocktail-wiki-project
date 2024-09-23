@@ -1,13 +1,7 @@
-import "./DrinkCard.css";
+import "./css/DrinkCard.css";
 import { Link } from "react-router-dom";
-import "./Header.css";
-
-interface IDrink {
-  name: string;
-  id: number;
-  image: string;
-  style?: string;
-}
+import "./css/Header.css";
+import { IDrink } from "../interfaces";
 
 function DrinkCard({ name, id, image, style }: IDrink) {
   return (

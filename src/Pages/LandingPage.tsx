@@ -1,30 +1,26 @@
 import DrinkCard from "../Components/DrinkCard";
 import Button from "../Components/Button";
 import { useEffect, useState } from "react";
-import { useCheckboxContext } from "../CheckBoxContext";
-import "./LandingPage.css";
+import { useCheckboxContext } from "../Context/CheckBoxContext.tsx";
+import "./css/LandingPage.css";
 import SkeletonCard from "../Skeletons/SkeletonCard.tsx";
-
-interface IDrink {
-  name: string;
-  id: number;
-  image: string;
-}
+import { IDrink } from "../interfaces.tsx";
 
 function LandingPage() {
+  // State & context
   const [activeDrink, setActiveDrink] = useState<IDrink>();
-
   const { isNonAlcoholic, setIsNonAlcoholic } = useCheckboxContext();
 
+  // fetch random drink from API
   const handleOnGetRandomDrink = async () => {
     let url: string;
-
+    // if non-alcholic is checked, fetch only non-alcholic drinks
     if (isNonAlcoholic) {
-      url =
-        "https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=Non_Alcoholic";
+      url = "https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=Non_Alcoholic";
       const response = await fetch(url);
       const data = await response.json();
 
+      //function to randomize the drink that becomes active
       const randomIndex = Math.floor(Math.random() * data.drinks.length);
       const randomDrink = data.drinks[randomIndex];
 
@@ -33,6 +29,8 @@ function LandingPage() {
         id: randomDrink.idDrink,
         image: randomDrink.strDrinkThumb,
       });
+
+      // else fetch any random drink
     } else {
       url = "https://www.thecocktaildb.com/api/json/v1/1/random.php";
       const response = await fetch(url);
@@ -45,15 +43,15 @@ function LandingPage() {
     }
   };
 
-  useEffect(() => {
-    handleOnGetRandomDrink();
-  }, [isNonAlcoholic]);
-
   const handleCheckboxChange = () => {
     if (setIsNonAlcoholic) {
       setIsNonAlcoholic(!isNonAlcoholic);
     }
   };
+
+  useEffect(() => {
+    handleOnGetRandomDrink();
+  }, [isNonAlcoholic]);
 
   return (
     <section className="landing-page">
@@ -65,6 +63,7 @@ function LandingPage() {
           style="drink-card"
         />
       ) : (
+        // show while activeDrink isn't set
         <SkeletonCard />
       )}
 
@@ -76,11 +75,7 @@ function LandingPage() {
 
       <div className="filter">
         <label>
-          <input
-            type="checkbox"
-            checked={isNonAlcoholic}
-            onChange={handleCheckboxChange}
-          />
+          <input type="checkbox" checked={isNonAlcoholic} onChange={handleCheckboxChange} />
           Show non-alcoholic drinks
         </label>
       </div>

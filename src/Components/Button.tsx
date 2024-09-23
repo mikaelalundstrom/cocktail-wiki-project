@@ -1,9 +1,4 @@
-interface IButton {
-  label: string;
-  onClick?: () => void;
-  className?: string;
-  disabled?: boolean;
-}
+import { IButton } from "../interfaces";
 
 function Button({ label, onClick, className, disabled }: IButton) {
   return (
