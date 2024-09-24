@@ -6,6 +6,7 @@ import "./css/CocktailInfoPage.css";
 import { FavoritesContext } from "../Context/FavoritesContext";
 import SkeletonInfo from "../Skeletons/SkeletonInfo";
 import { IDrinkInfo } from "../interfaces";
+import Button from "../Components/Button";
 
 function CocktailInfoPage() {
   let { id } = useParams();
@@ -25,6 +26,7 @@ function CocktailInfoPage() {
   });
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
   const { favoriteDrinks, setFavoriteDrinks } = useContext(FavoritesContext);
+  const [linkCopied, setLinkCopied] = useState<boolean>(false);
 
   // Function to check if drink is in favorites based on FavoritesContext
   const checkIfInFavorites = () => {
@@ -39,6 +41,13 @@ function CocktailInfoPage() {
         setIsFavorite(false);
       }
     }
+  };
+
+  const shareCocktailLink = () => {
+    const cocktailUrl = window.location.href;
+    navigator.clipboard.writeText(cocktailUrl);
+    setLinkCopied(true);
+    console.log("clicked");
   };
 
   useEffect(() => {
@@ -161,6 +170,11 @@ function CocktailInfoPage() {
                 ? activeDrink.tags.map((tag: string, i) => <p key={i}>{tag}</p>)
                 : ""}
             </div>
+            <Button
+              label={linkCopied ? "Link copied!" : "Share Cocktail"}
+              onClick={shareCocktailLink}
+              className="share-button"
+            ></Button>
           </section>
         </div>
       ) : (
