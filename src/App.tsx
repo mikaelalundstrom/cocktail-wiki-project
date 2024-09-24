@@ -4,10 +4,13 @@ import { FavoritesContext } from "./Context/FavoritesContext";
 import { useState } from "react";
 import { CheckboxProvider } from "./Context/CheckBoxContext"; // Import the provider
 import { IDrink } from "./interfaces";
+import { SearchContext } from "./Context/SearchContext";
 
 function App() {
-  // favorite context
+  // favorite, search and search message context
   const [favoriteDrinks, setFavoriteDrinks] = useState<IDrink[]>([]);
+  const [foundDrinks, setFoundDrinks] = useState<IDrink[]>([]);
+  const [searchMessage, setSearchMessage] = useState<string>("");
 
   return (
     <>
@@ -16,7 +19,11 @@ function App() {
       <FavoritesContext.Provider value={{ favoriteDrinks, setFavoriteDrinks }}>
         {/* non-alcholic checkbox provider */}
         <CheckboxProvider>
-          <Outlet />
+          <SearchContext.Provider
+            value={{ foundDrinks, setFoundDrinks, searchMessage, setSearchMessage }}
+          >
+            <Outlet />
+          </SearchContext.Provider>
         </CheckboxProvider>
       </FavoritesContext.Provider>
     </>

@@ -1,20 +1,21 @@
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useContext, useEffect, useRef, useState } from "react";
 
 import "./css/SearchPage.css";
 import DrinkCard from "../Components/DrinkCard";
 import Button from "../Components/Button";
 import SkeletonCard from "../Skeletons/SkeletonCard";
 import Select from "../Components/Select";
-import { IDrink } from "../interfaces";
+import { SearchContext } from "../Context/SearchContext";
 
 function SearchPage() {
   // STATES & ref
   // pagination
   const drinksPerPage = 10;
-  const [foundDrinks, setFoundDrinks] = useState<IDrink[]>([]);
+  const { foundDrinks, setFoundDrinks, searchMessage, setSearchMessage } =
+    useContext(SearchContext);
   const [currentPage, setCurrentPage] = useState(1);
   // search message
-  const [searchMessage, setSearchMessage] = useState<string>("");
+  // const [searchMessage, setSearchMessage] = useState<string>("");
   // state for placeholders while loading
   const [isLoading, setIsLoading] = useState<boolean>(false);
   // form
@@ -70,26 +71,29 @@ function SearchPage() {
         currentDrinks = await filterSearch("a", alcohol, currentDrinks, searchTerm);
         searchTerm = true;
       }
-      // if no valid search and no filters selected
-      if (
-        inputRef.current!.value.trim().length === 0 &&
-        !category &&
-        !glass &&
-        !ingredient &&
-        !alcohol
-      ) {
-        setFoundDrinks([]);
-        setSearchMessage("Please enter a valid search term or apply a filter");
-      } else {
-        // set drink message and set found drinks based on current drinks
-        messageForDrinksFound(currentDrinks!);
-        setFoundDrinks(
-          currentDrinks!.map((drink: any) => ({
-            name: drink.strDrink,
-            id: drink.idDrink,
-            image: drink.strDrinkThumb,
-          }))
-        );
+
+      if (setFoundDrinks && setSearchMessage) {
+        // if no valid search and no filters selected
+        if (
+          inputRef.current!.value.trim().length === 0 &&
+          !category &&
+          !glass &&
+          !ingredient &&
+          !alcohol
+        ) {
+          setFoundDrinks([]);
+          setSearchMessage("Please enter a valid search term or apply a filter");
+        } else {
+          // set drink message and set found drinks based on current drinks
+          messageForDrinksFound(currentDrinks!);
+          setFoundDrinks(
+            currentDrinks!.map((drink: any) => ({
+              name: drink.strDrink,
+              id: drink.idDrink,
+              image: drink.strDrinkThumb,
+            }))
+          );
+        }
       }
 
       setCurrentPage(1);
@@ -131,15 +135,17 @@ function SearchPage() {
 
   // what message to display to user after search
   const messageForDrinksFound = (drinks: [] | null) => {
-    if (drinks === null) {
-      setSearchMessage("No drinks found");
-    } else {
-      if (drinks!.length === 0) {
+    if (setSearchMessage) {
+      if (drinks === null) {
         setSearchMessage("No drinks found");
-      } else if (drinks!.length === 1) {
-        setSearchMessage(`${drinks!.length} drink found`);
       } else {
-        setSearchMessage(`${drinks!.length} drinks found`);
+        if (drinks!.length === 0) {
+          setSearchMessage("No drinks found");
+        } else if (drinks!.length === 1) {
+          setSearchMessage(`${drinks!.length} drink found`);
+        } else {
+          setSearchMessage(`${drinks!.length} drinks found`);
+        }
       }
     }
   };
@@ -147,10 +153,10 @@ function SearchPage() {
   // pagination
   const lastDrink = currentPage * drinksPerPage;
   const firstDrink = lastDrink - drinksPerPage;
-  const currentDrinks = foundDrinks.slice(firstDrink, lastDrink);
+  const currentDrinks = foundDrinks!.slice(firstDrink, lastDrink);
 
   const nextPage = () => {
-    if (Math.ceil(foundDrinks.length / drinksPerPage)) {
+    if (Math.ceil(foundDrinks!.length / drinksPerPage)) {
       setCurrentPage((prev) => prev + 1);
     }
   };
@@ -206,7 +212,7 @@ function SearchPage() {
         </form>
       </section>
       <p className="search-message">{searchMessage}</p>
-      {foundDrinks.length < 11 ? (
+      {foundDrinks!.length < 11 ? (
         ""
       ) : (
         <section className="searchPage-button-section">
@@ -214,7 +220,7 @@ function SearchPage() {
           <Button
             onClick={nextPage}
             label={"Next"}
-            disabled={currentPage === Math.ceil(foundDrinks.length / drinksPerPage) ? true : false}
+            disabled={currentPage === Math.ceil(foundDrinks!.length / drinksPerPage) ? true : false}
           />
         </section>
       )}
@@ -234,7 +240,7 @@ function SearchPage() {
               ))
         }
       </section>
-      {foundDrinks.length < 11 ? (
+      {foundDrinks!.length < 11 ? (
         ""
       ) : (
         <section className="searchPage-button-section bottom">
@@ -242,7 +248,7 @@ function SearchPage() {
           <Button
             onClick={nextPage}
             label={"Next"}
-            disabled={currentPage === Math.ceil(foundDrinks.length / drinksPerPage) ? true : false}
+            disabled={currentPage === Math.ceil(foundDrinks!.length / drinksPerPage) ? true : false}
           />
         </section>
       )}
