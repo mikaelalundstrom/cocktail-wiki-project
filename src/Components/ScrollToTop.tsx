@@ -4,6 +4,7 @@ import "./css/ScrollToTop.css";
 
 function ScrollToTop() {
   const [showScrollTopBtn, setShowScrollTopBtn] = useState<boolean>(false);
+
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,

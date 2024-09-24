@@ -14,7 +14,7 @@ function DrinksByIngredient({ name }: IDrinksbyIngredient) {
   const lastDrink = drinkBatch * drinksPerBatch;
   const currentDrinks = listOfDrinks.slice(0, lastDrink);
 
-  // Keeps track of how much the user has scrolled on the page (for infinite scroll/back to top)
+  // Keeps track of how much the user has scrolled on the page
   const handleScroll = () => {
     // updates infinite scroll list of related drinks
     if (

@@ -21,7 +21,6 @@ function IngredientPage() {
     strength: 0,
     image: "",
   });
-  // const [listOfDrinks, setListOfDrinks] = useState<IDrink[]>([]);
   // Scroll related states/variables
 
   // States/ref for expandable description
@@ -88,6 +87,11 @@ function IngredientPage() {
       }
     }
   }, [descRef.current]);
+
+  // change title in browser to reflect current page
+  useEffect(() => {
+    document.title = `Cocktail Wiki - ${name}`;
+  }, []);
 
   return (
     <>

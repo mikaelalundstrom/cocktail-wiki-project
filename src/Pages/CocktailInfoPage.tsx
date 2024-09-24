@@ -87,6 +87,9 @@ function CocktailInfoPage() {
           return;
         }
 
+        // change title in browser to reflect current page
+        document.title = `Cocktail Wiki - ${data.drinks[0].strDrink}`;
+
         // format data
         let tags;
         if (data.drinks[0].strTags) {
@@ -122,6 +125,7 @@ function CocktailInfoPage() {
         navigate("/not-found");
       }
     };
+
     getDrinkById();
   }, [id, navigate]);
 

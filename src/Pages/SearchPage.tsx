@@ -194,6 +194,11 @@ function SearchPage() {
     setupFilters();
   }, []);
 
+  // change title in browser to reflect current page
+  useEffect(() => {
+    document.title = `Cocktail Wiki - Search`;
+  }, []);
+
   return (
     <>
       <section className="search">

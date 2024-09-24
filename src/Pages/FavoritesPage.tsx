@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { FavoritesContext } from "../Context/FavoritesContext";
 import DrinkCard from "../Components/DrinkCard";
 
@@ -7,6 +7,11 @@ import "./css/FavoritesPage.css";
 function FavoritesPage() {
   // use context to display favorites
   const { favoriteDrinks } = useContext(FavoritesContext);
+
+  useEffect(() => {
+    document.title = "Cocktail Wiki - Favorites";
+  }, []);
+
   return (
     <>
       <h1 className="favorites-title">Favorite cocktails</h1>

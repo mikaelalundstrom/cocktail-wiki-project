@@ -53,6 +53,11 @@ function LandingPage() {
     handleOnGetRandomDrink();
   }, [isNonAlcoholic]);
 
+  // change title in browser to reflect current page
+  useEffect(() => {
+    document.title = `Cocktail Wiki - Find Your Favorite Drink!`;
+  }, []);
+
   return (
     <section className="landing-page">
       {activeDrink ? (
