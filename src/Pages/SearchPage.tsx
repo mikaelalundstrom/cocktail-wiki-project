@@ -6,6 +6,7 @@ import Button from "../Components/Button";
 import SkeletonCard from "../Skeletons/SkeletonCard";
 import Select from "../Components/Select";
 import { SearchContext } from "../Context/SearchContext";
+import ScrollToTop from "../Components/ScrollToTop";
 
 function SearchPage() {
   // STATES & ref
@@ -252,6 +253,7 @@ function SearchPage() {
           />
         </section>
       )}
+      <ScrollToTop />
     </>
   );
 }

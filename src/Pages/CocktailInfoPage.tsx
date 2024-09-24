@@ -43,6 +43,7 @@ function CocktailInfoPage() {
     }
   };
 
+  // function to copy cocktail link to clipboard
   const shareCocktailLink = () => {
     const cocktailUrl = window.location.href;
     navigator.clipboard.writeText(cocktailUrl);
@@ -166,6 +167,7 @@ function CocktailInfoPage() {
             </div>
             <p className="glass-info">Best served in a {activeDrink.glass}</p>
             <div className="tags">
+              <p>Tags:</p>
               {activeDrink.tags
                 ? activeDrink.tags.map((tag: string, i) => <p key={i}>{tag}</p>)
                 : ""}
