@@ -11,6 +11,15 @@ function App() {
   const [favoriteDrinks, setFavoriteDrinks] = useState<IDrink[]>([]);
   const [foundDrinks, setFoundDrinks] = useState<IDrink[]>([]);
   const [searchMessage, setSearchMessage] = useState<string>("");
+  const [searchedValue, setSearchedValue] = useState<string>("");
+  const searchContextValue = {
+    foundDrinks,
+    setFoundDrinks,
+    searchMessage,
+    setSearchMessage,
+    searchedValue,
+    setSearchedValue,
+  };
 
   return (
     <>
@@ -19,9 +28,7 @@ function App() {
       <FavoritesContext.Provider value={{ favoriteDrinks, setFavoriteDrinks }}>
         {/* non-alcholic checkbox provider */}
         <CheckboxProvider>
-          <SearchContext.Provider
-            value={{ foundDrinks, setFoundDrinks, searchMessage, setSearchMessage }}
-          >
+          <SearchContext.Provider value={searchContextValue}>
             <Outlet />
           </SearchContext.Provider>
         </CheckboxProvider>

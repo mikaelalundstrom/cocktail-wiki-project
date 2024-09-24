@@ -8,6 +8,7 @@ function FavoritesPage() {
   // use context to display favorites
   const { favoriteDrinks } = useContext(FavoritesContext);
 
+  // change title in browser to reflect current page
   useEffect(() => {
     document.title = "Cocktail Wiki - Favorites";
   }, []);

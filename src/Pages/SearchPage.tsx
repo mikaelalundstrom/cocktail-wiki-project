@@ -12,8 +12,14 @@ function SearchPage() {
   // STATES & ref
   // pagination
   const drinksPerPage = 10;
-  const { foundDrinks, setFoundDrinks, searchMessage, setSearchMessage } =
-    useContext(SearchContext);
+  const {
+    foundDrinks,
+    setFoundDrinks,
+    searchMessage,
+    setSearchMessage,
+    searchedValue,
+    setSearchedValue,
+  } = useContext(SearchContext);
   const [currentPage, setCurrentPage] = useState(1);
   // search message
   // const [searchMessage, setSearchMessage] = useState<string>("");
@@ -43,6 +49,9 @@ function SearchPage() {
       let searchTerm;
       // check if entered input is valid
       if (inputRef.current!.value.trim().length > 0) {
+        // remember input value in context
+        setSearchedValue!(inputRef.current!.value.trim());
+
         const response = await fetch(
           `https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${inputRef.current!.value.trim()}`
         );
@@ -205,7 +214,12 @@ function SearchPage() {
         <form className="search-form" onSubmit={handleOnSearch}>
           <h2>Search</h2>
           <div>
-            <input type="text" placeholder="drink name..." ref={inputRef} />
+            <input
+              type="text"
+              placeholder="drink name..."
+              defaultValue={searchedValue ? searchedValue : ""}
+              ref={inputRef}
+            />
             <Button className={"search-button"} label={"Search"} />
           </div>
           <h2>Filters</h2>

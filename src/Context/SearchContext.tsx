@@ -6,4 +6,6 @@ export const SearchContext = createContext<{
   setFoundDrinks?: (foundDrinks: IDrink[]) => void;
   searchMessage?: string;
   setSearchMessage?: (searchMessage: string) => void;
+  searchedValue?: string;
+  setSearchedValue?: (searchedValue: string) => void;
 }>({});
