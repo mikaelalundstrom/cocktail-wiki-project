@@ -48,7 +48,6 @@ function CocktailInfoPage() {
     const cocktailUrl = window.location.href;
     navigator.clipboard.writeText(cocktailUrl);
     setLinkCopied(true);
-    console.log("clicked");
   };
 
   useEffect(() => {
@@ -170,12 +169,18 @@ function CocktailInfoPage() {
               ))}
             </div>
             <p className="glass-info">Best served in a {activeDrink.glass}</p>
-            <div className="tags">
-              <p>Tags:</p>
-              {activeDrink.tags
-                ? activeDrink.tags.map((tag: string, i) => <p key={i}>{tag}</p>)
-                : ""}
-            </div>
+
+            {activeDrink.tags ? (
+              <div className="tags">
+                <p>Tags:</p>
+                {activeDrink.tags.map((tag: string, i) => (
+                  <p key={i}>{tag}</p>
+                ))}
+              </div>
+            ) : (
+              ""
+            )}
+
             <Button
               label={linkCopied ? "Link copied!" : "Share Cocktail"}
               onClick={shareCocktailLink}
