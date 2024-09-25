@@ -71,6 +71,7 @@ function CocktailInfoPage() {
       }
     }
   }, [isFavorite]);
+
   // fetch drink from API through id
   useEffect(() => {
     const getDrinkById = async () => {
@@ -106,6 +107,7 @@ function CocktailInfoPage() {
           const ingredientItem: string = data.drinks[0]["strIngredient" + i];
           ingredientsArr.push(ingredientItem);
         }
+
         // set fetched data to activeDrink
         setActiveDrink({
           name: data.drinks[0].strDrink,

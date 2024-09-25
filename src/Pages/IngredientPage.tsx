@@ -21,7 +21,6 @@ function IngredientPage() {
     strength: 0,
     image: "",
   });
-  // Scroll related states/variables
 
   // States/ref for expandable description
   const [descExpand, setDescExpand] = useState<boolean>(false);
