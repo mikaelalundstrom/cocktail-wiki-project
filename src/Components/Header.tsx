@@ -11,6 +11,7 @@ function Header() {
       <div>
         <Link to="/search">Search</Link>
         <Link to="/favorites">Favorites</Link>
+        {/* test */}
       </div>
     </header>
   );
