@@ -2,7 +2,7 @@ import DrinkCard from "../Components/DrinkCard";
 import Button from "../Components/Button";
 import { useEffect, useState } from "react";
 import { useCheckboxContext } from "../Context/CheckBoxContext.tsx";
-import "./css/LandingPage.css";
+import "./css/landingPage.css";
 import SkeletonCard from "../Skeletons/SkeletonCard.tsx";
 import { IDrink } from "../interfaces.tsx";
 
@@ -16,7 +16,8 @@ function LandingPage() {
     let url: string;
     // if non-alcholic is checked, fetch only non-alcholic drinks
     if (isNonAlcoholic) {
-      url = "https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=Non_Alcoholic";
+      url =
+        "https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=Non_Alcoholic";
       const response = await fetch(url);
       const data = await response.json();
 
@@ -80,7 +81,11 @@ function LandingPage() {
 
       <div className="filter">
         <label>
-          <input type="checkbox" checked={isNonAlcoholic} onChange={handleCheckboxChange} />
+          <input
+            type="checkbox"
+            checked={isNonAlcoholic}
+            onChange={handleCheckboxChange}
+          />
           Show non-alcoholic drinks
         </label>
       </div>
