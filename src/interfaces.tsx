@@ -46,6 +46,5 @@ export interface ISelect {
 }
 
 export interface ISkeleton {
-  outer?: string;
   type: string;
 }
